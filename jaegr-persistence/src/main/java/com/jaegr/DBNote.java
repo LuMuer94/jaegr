@@ -1,9 +1,6 @@
 package com.jaegr;
 
-import javax.persistence.Entity;
-import javax.persistence.OneToOne;
-import javax.persistence.Temporal;
-import javax.persistence.TemporalType;
+import javax.persistence.*;
 import javax.xml.bind.annotation.XmlRootElement;
 import java.util.Date;
 
@@ -12,11 +9,15 @@ import java.util.Date;
  */
 @Entity
 @XmlRootElement
-public class DBNote {
+public class DBNote extends DBIdentified {
+    @OneToMany(mappedBy = "notes")
     private DBGroup group;
-    @OneToOne
+
+    @ManyToOne
     private DBUser user;
+
     private String title;
+
     private Date date;
 
     public DBGroup getGroup() {

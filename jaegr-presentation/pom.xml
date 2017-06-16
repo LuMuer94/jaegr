@@ -37,7 +37,18 @@
 			</plugins>
 		</pluginManagement>
 		<plugins>
-
+			<plugin>
+				<groupId>org.wildfly.swarm</groupId>
+				<artifactId>wildfly-swarm-plugin</artifactId>
+				<version>${wildfly-swarm.version}</version>
+				<executions>
+					<execution>
+						<goals>
+							<goal>package</goal>
+						</goals>
+					</execution>
+				</executions>
+			</plugin>
 			<plugin>
 				<groupId>com.github.dzwicker.dart</groupId>
 				<artifactId>dart-maven-plugin</artifactId>

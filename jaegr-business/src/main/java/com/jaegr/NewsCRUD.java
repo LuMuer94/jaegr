@@ -25,6 +25,7 @@ public class NewsCRUD {
 	@PersistenceContext
 	private EntityManager entityManager;
 
+	/*
 	@GET
 	@Path("newest")
 	@Produces(MediaType.APPLICATION_JSON)
@@ -41,7 +42,7 @@ public class NewsCRUD {
 		return Response.ok(
 				this.entityManager.createQuery(query).setMaxResults(1).getSingleResult()
 		).build();
-	}
+	}*/
 
 	@POST
 	@Consumes(MediaType.APPLICATION_JSON)

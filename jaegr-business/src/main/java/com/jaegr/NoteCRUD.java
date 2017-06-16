@@ -18,7 +18,6 @@ public class NoteCRUD {
 
     @GET
     @Produces (MediaType.APPLICATION_JSON)
-
     public String nameDoesntMatter (){
         return "hello world";
     }

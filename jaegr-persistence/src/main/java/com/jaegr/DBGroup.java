@@ -3,7 +3,9 @@ package com.jaegr;
 
 import javax.persistence.Entity;
 import javax.persistence.ManyToMany;
+import javax.persistence.ManyToOne;
 import javax.xml.bind.annotation.XmlRootElement;
+import java.util.List;
 import java.util.Set;
 
 /**
@@ -13,8 +15,12 @@ import java.util.Set;
 @XmlRootElement
 public class DBGroup extends DBIdentified {
     private String name;
+
+    @ManyToOne
+    private Set<DBNote> notes;
+
     @ManyToMany
-    private Set<DBUser> group;
+    private Set<DBUser> users;
 
     public String getName() {
         return name;
@@ -24,11 +30,19 @@ public class DBGroup extends DBIdentified {
         this.name = name;
     }
 
-    public Set<DBUser> getGroup() {
-        return group;
+    public Set<DBUser> getUsers() {
+        return users;
     }
 
-    public void setGroup(Set<DBUser> group) {
-        this.group = group;
+    public void setUsers(Set<DBUser> users) {
+        this.users = users;
+    }
+
+    public Set<DBNote> getNotes() {
+        return notes;
+    }
+
+    public void setNotes(Set<DBNote> notes) {
+        this.notes = notes;
     }
 }
