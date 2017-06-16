@@ -41,7 +41,7 @@ public class UserCRUD  {
 
     @GET
     @Produces(MediaType.APPLICATION_JSON)
-    public Response get(@PathParam("id") long userId) {
+    public Response get(@QueryParam("id") long userId) {
         UserDAO dao = new UserDAO(entityManager);
         DBUser user = dao.get(userId);
         return Response.ok(user).build();

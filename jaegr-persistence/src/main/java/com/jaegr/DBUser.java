@@ -14,10 +14,8 @@ public class DBUser extends DBIdentified {
 
     private String passwordHash;
 
-    @ManyToMany(mappedBy = "users")
     private Set<DBGroup> groups;
 
-    @OneToMany(mappedBy = "user")
     private Set<DBNote> notes;
 
     public String getName() {
@@ -28,6 +26,7 @@ public class DBUser extends DBIdentified {
         this.name = name;
     }
 
+    @ManyToMany(mappedBy = "users")
     public Set<DBGroup> getGroups() {
         return groups;
     }
@@ -36,6 +35,7 @@ public class DBUser extends DBIdentified {
         this.groups = groups;
     }
 
+    @OneToMany(mappedBy = "user")
     public Set<DBNote> getNotes() {
         return notes;
     }

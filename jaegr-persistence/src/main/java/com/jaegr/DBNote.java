@@ -10,16 +10,15 @@ import java.util.Date;
 @Entity
 @XmlRootElement
 public class DBNote extends DBIdentified {
-    @OneToMany(mappedBy = "notes")
     private DBGroup group;
 
-    @ManyToOne
     private DBUser user;
 
     private String title;
 
     private Date date;
 
+    @ManyToOne
     public DBGroup getGroup() {
         return group;
     }
@@ -28,6 +27,7 @@ public class DBNote extends DBIdentified {
         this.group = group;
     }
 
+    @ManyToOne
     public DBUser getUser() {
         return user;
     }

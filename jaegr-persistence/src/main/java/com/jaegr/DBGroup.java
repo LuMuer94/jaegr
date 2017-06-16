@@ -4,6 +4,7 @@ package com.jaegr;
 import javax.persistence.Entity;
 import javax.persistence.ManyToMany;
 import javax.persistence.ManyToOne;
+import javax.persistence.OneToMany;
 import javax.xml.bind.annotation.XmlRootElement;
 import java.util.List;
 import java.util.Set;
@@ -16,10 +17,8 @@ import java.util.Set;
 public class DBGroup extends DBIdentified {
     private String name;
 
-    @ManyToOne
     private Set<DBNote> notes;
 
-    @ManyToMany
     private Set<DBUser> users;
 
     public String getName() {
@@ -30,6 +29,7 @@ public class DBGroup extends DBIdentified {
         this.name = name;
     }
 
+    @ManyToMany
     public Set<DBUser> getUsers() {
         return users;
     }
@@ -38,6 +38,7 @@ public class DBGroup extends DBIdentified {
         this.users = users;
     }
 
+    @OneToMany(mappedBy = "group")
     public Set<DBNote> getNotes() {
         return notes;
     }
