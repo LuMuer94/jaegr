@@ -12,7 +12,7 @@ import java.util.Date;
  */
 @Entity
 @XmlRootElement
-public class DBNote {
+public class DBNote extends DBIdentified{
     private DBGroup group;
     @OneToOne
     private DBUser user;
