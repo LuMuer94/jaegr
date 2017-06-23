@@ -4,6 +4,7 @@ import javax.persistence.Entity;
 import javax.persistence.ManyToMany;
 import javax.persistence.OneToMany;
 import javax.xml.bind.annotation.XmlRootElement;
+import java.util.HashSet;
 import java.util.List;
 import java.util.Set;
 
@@ -28,6 +29,10 @@ public class DBUser extends DBIdentified {
 
     @ManyToMany
     public Set<DBUser> getFriends() {
+        if (friends == null) {
+            friends = new HashSet<DBUser>();
+        }
+
         return friends;
     }
 
@@ -37,6 +42,10 @@ public class DBUser extends DBIdentified {
 
     @OneToMany(mappedBy = "user")
     public Set<DBNote> getNotes() {
+        if (notes == null) {
+            notes = new HashSet<DBNote>();
+        }
+
         return notes;
     }
 

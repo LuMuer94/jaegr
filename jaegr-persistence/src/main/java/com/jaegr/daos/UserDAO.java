@@ -92,4 +92,5 @@ public class UserDAO extends BaseDAO{
         return entityManager.createQuery(query).getSingleResult();
 
     }
+
 }

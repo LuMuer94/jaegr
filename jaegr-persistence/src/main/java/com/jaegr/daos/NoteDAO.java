@@ -1,5 +1,5 @@
 package com.jaegr.daos;
-
+//TODO Delete Note -> user
 
 import com.jaegr.DBNote;
 import com.jaegr.DBNote_;
@@ -34,7 +34,12 @@ public class NoteDAO extends BaseDAO {
         note.setDate(new Date());
         //TODO Enum Privacy
 
+
         this.entityManager.persist(note);
+
+        Set<DBNote> notes = param.getUser().getNotes();
+        notes.add(note);
+        param.getUser().setNotes(notes);
 
         return note;
     }
@@ -65,6 +70,8 @@ public class NoteDAO extends BaseDAO {
 
         if (note != null) {
 
+            removeNotesFromUser(note);
+
             this.entityManager.remove(note);
 
         }
@@ -73,6 +80,7 @@ public class NoteDAO extends BaseDAO {
     }
 
     public List<DBNote> deleteAllNotesContaining(String forbidden) {
+
 
         final CriteriaBuilder builder = this.entityManager.getCriteriaBuilder();
         final CriteriaQuery<DBNote> query = builder.createQuery(DBNote.class);
@@ -83,6 +91,9 @@ public class NoteDAO extends BaseDAO {
         List<DBNote> notes = this.entityManager.createQuery(query).getResultList();
 
         for(DBNote note : notes){
+
+            removeNotesFromUser(note);
+
             this.entityManager.remove(note);
         }
 
@@ -203,6 +214,16 @@ public class NoteDAO extends BaseDAO {
         }
 
         return user;
+    }
+
+    public void removeNotesFromUser(DBNote note){
+        Set<DBNote> notes;
+        DBUser user;
+
+        user = note.getUser();
+        notes = user.getNotes();
+        notes.remove(note);
+        user.setNotes(notes);
     }
 
     public Set<DBNote> getNotesByUser(long id){

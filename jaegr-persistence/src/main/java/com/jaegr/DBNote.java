@@ -3,6 +3,7 @@ package com.jaegr;
 import javax.persistence.*;
 import javax.xml.bind.annotation.XmlRootElement;
 import java.util.Date;
+import java.util.HashSet;
 import java.util.Set;
 
 /**
@@ -19,6 +20,7 @@ public class DBNote extends DBIdentified {
 
     private Date date;
 
+    //TODO Enum
     private boolean privacy;
 
     @ManyToOne
@@ -57,6 +59,9 @@ public class DBNote extends DBIdentified {
 
     @ManyToMany
     public Set<DBUser> getRecipients() {
+        if (recipients == null) {
+            recipients = new HashSet<DBUser>();
+        }
         return recipients;
     }
 
