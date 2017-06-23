@@ -2,14 +2,15 @@ package com.jaegr.daos;
 
 
 import com.jaegr.DBNote;
+import com.jaegr.DBNote_;
 import com.jaegr.DBUser;
 
 import javax.persistence.EntityManager;
 import javax.persistence.criteria.CriteriaBuilder;
 import javax.persistence.criteria.CriteriaQuery;
+import javax.persistence.criteria.Order;
 import javax.persistence.criteria.Root;
-import java.util.Date;
-import java.util.Set;
+import java.util.*;
 
 /**
  * Created by leono on 13.06.2017.
@@ -22,27 +23,16 @@ public class NoteDAO extends BaseDAO {
         super(entityManager);
     }
 
-    /*
-    public Set<DBNote> getNotesByDate(Date date){
-
-        final CriteriaBuilder builder = this.entityManager.getCriteriaBuilder();
-        final CriteriaQuery<DBNote> query = builder.createQuery(DBNote.class);
-        final Root<DBNote> from = query.from(DBNote.class);
-
-        query.where(builder.equal(from.get(DBNote_.date), date));
-        entityManager.createQuery(query).getResultList();
-
-    }
-    */
-
     public DBNote createNote(DBNote param){
-        /*TODO Validate input?*/
-        final DBNote note = new DBNote();
 
+        final DBNote note = new DBNote();
+        /*TODO Session ID?! */
+        /*TODO Validate input*/
         note.setUser(param.getUser());
-        note.setGroup(param.getGroup());
+        note.setRecipients(param.getRecipients());
         note.setTitle(param.getTitle());
         note.setDate(new Date());
+        //TODO Enum Privacy
 
         this.entityManager.persist(note);
 
@@ -50,31 +40,176 @@ public class NoteDAO extends BaseDAO {
     }
 
     public DBNote editNote(long id, DBNote edit){
+
         DBNote note;
+
+        edit.setId(id);
 
         note = entityManager.find(DBNote.class, id);
 
         if (note != null) {
             note.setTitle(edit.getTitle());
-            /*TODO Date for edit?*/
+            note.setDate(new Date());
             entityManager.merge(note);
         }
 
         return note;
+
     }
 
     public DBNote deleteNote(long id) {
 
-        DBNote note = entityManager.find(DBNote.class, id);
+        DBNote note;
+
+        note = this.entityManager.find(DBNote.class, id);
 
         if (note != null) {
-            entityManager.remove(note);
+
+            this.entityManager.remove(note);
+
         }
+
         return note;
     }
 
-    public Set<DBNote> deleteAllNotesContaining(){
-        return null;
+    public List<DBNote> deleteAllNotesContaining(String forbidden) {
+
+        final CriteriaBuilder builder = this.entityManager.getCriteriaBuilder();
+        final CriteriaQuery<DBNote> query = builder.createQuery(DBNote.class);
+
+        final Root<DBNote> from = query.from(DBNote.class);
+
+        query.where(builder.equal(from.get(DBNote_.title), forbidden));
+        List<DBNote> notes = this.entityManager.createQuery(query).getResultList();
+
+        for(DBNote note : notes){
+            this.entityManager.remove(note);
+        }
+
+        return notes;
+    }
+
+    /*
+    public List<DBNote> getNotesByFriends(long id){
+
+        List<DBNote> notes = null;
+        Set<DBNote> candidates;
+
+        DBUser user = get(id);
+
+        Set<DBUser> friends = user.getFriends();
+        for(DBUser friend : friends){
+            candidates = friend.getNotes();
+            for(DBNote note : candidates){
+                // TODO Privacy?
+                if(!note.isPrivacy() && note.getRecipients().contains(user)){
+                    notes.add(note);
+                }
+            }
+        }
+
+        Collections.sort(notes, new Comparator<DBNote>() {
+            public int compare(DBNote o1, DBNote o2) {
+                if (o1.getDate() == null || o2.getDate() == null)
+                    return 0;
+                return o1.getDate().compareTo(o2.getDate());
+            }
+        });
+
+        return notes;
+
+    }
+    */
+
+    public Set<DBNote> getNotesByCriteria(long id, int maxResults, String keyword){
+
+        List<DBNote> candidates;
+
+        DBUser user = get(id);
+
+        Set<DBUser> friends = user.getFriends();
+
+        // Sort "maxResults" notes by date
+        final CriteriaBuilder builder = this.entityManager.getCriteriaBuilder();
+        final CriteriaQuery<DBNote> query = builder.createQuery(DBNote.class);
+
+        final Root<DBNote> from = query.from(DBNote.class);
+
+        final Order order = builder.desc(from.get(DBNote_.date));
+
+        query.select(from).orderBy(order);
+
+        candidates = this.entityManager.createQuery(query).setMaxResults(maxResults).getResultList();
+
+        // Select notes:
+        // + directed to the user (id)  + written by a friend + title contains keyword
+        Set<DBNote> selection = null;
+        // TODO PRIVACY
+        for(DBNote candidate : candidates){
+            if(friends.contains(candidate.getUser())){
+                if(candidate.getRecipients().contains(user)){
+                    if(candidate.getTitle().contains("keyword")){
+                        selection.add(candidate);
+                    }
+                }
+            }
+        }
+
+        return selection;
+    }
+    /*
+    public Set<DBNote> getNotesByFriends(long id, int maxResults){
+
+        List<DBNote> candidates;
+
+        DBUser user = get(id);
+
+        Set<DBUser> friends = user.getFriends();
+
+        // Sort "maxResults" notes by date
+        final CriteriaBuilder builder = this.entityManager.getCriteriaBuilder();
+        final CriteriaQuery<DBNote> query = builder.createQuery(DBNote.class);
+
+        final Root<DBNote> from = query.from(DBNote.class);
+
+        final Order order = builder.desc(from.get(DBNote_.date));
+
+        query.select(from).orderBy(order);
+
+        candidates = this.entityManager.createQuery(query).setMaxResults(maxResults).getResultList();
+
+        // Select notes:
+        // + directed to the user (id)  + written by a friend
+        Set<DBNote> selection = null;
+        // TODO PRIVACY
+        for(DBNote candidate : candidates){
+            if(friends.contains(candidate.getUser())){
+                if(candidate.getRecipients().contains(user)){
+                    selection.add(candidate);
+                }
+            }
+        }
+
+        return selection;
+    }
+    */
+
+    public DBUser get(long id) {
+
+        DBUser user = entityManager.find(DBUser.class, id);
+
+        if(user == null) {
+            //ToDo: UserNotFoundException
+        }
+
+        return user;
+    }
+
+    public Set<DBNote> getNotesByUser(long id){
+
+        DBUser user = get(id);
+
+        return user.getNotes();
     }
 
 }

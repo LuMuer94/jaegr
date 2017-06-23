@@ -11,7 +11,7 @@ import javax.transaction.Transactional;
 import javax.ws.rs.*;
 import javax.ws.rs.core.MediaType;
 import javax.ws.rs.core.Response;
-import java.util.Date;
+import java.util.List;
 import java.util.Set;
 
 /**
@@ -24,41 +24,56 @@ public class NoteCRUD {
     @PersistenceContext
     private EntityManager entityManager;
 
-    NoteDAO noteDAO;
 
     @Path("/{id}")
     @GET
     @Consumes(MediaType.TEXT_PLAIN)
     @Produces(MediaType.APPLICATION_JSON)
-    public DBNote getNoteByID(@PathParam("id") final long id){
-        DBNote noteByID;
+    public Response getNoteByUser(@PathParam("id") final long id){
 
-        noteByID = this.entityManager.find(DBNote.class, id);
+        NoteDAO dao = new NoteDAO(entityManager);
 
-        if(noteByID == null){
-            /*
-            TODO NoteNotFoundException
-             */
-        }
-        return noteByID;
+        Set<DBNote> notesByUser = dao.getNotesByUser(id);
+
+        return Response.ok(notesByUser).build();
     }
+
+    @Path("/{id}")
+    @GET
+    @Consumes(MediaType.APPLICATION_JSON)
+    @Produces(MediaType.APPLICATION_JSON)
+    public Response getNotesByCriteria(@PathParam("id") final long id, final int maxResults, final String keyword){
+
+        NoteDAO dao = new NoteDAO(entityManager);
+
+        Set<DBNote> notes = dao.getNotesByCriteria(id, maxResults, keyword);
+
+        return Response.ok(notes).build();
+    }
+
+    /* // TODO alternative Path for keyword?
+    @Path("/{id}/{keyword}")
+    @GET
+    @Consumes(MediaType.APPLICATION_JSON)
+    @Produces(MediaType.APPLICATION_JSON)
+    public Response getNotesByKeyword(@PathParam("id") final long id, @PathParam("keyword") final String keyword, final int maxResults){
+
+        NoteDAO dao = new NoteDAO(entityManager);
+
+        List<DBNote> notes = dao.getNotesByKeyword(id, maxResults, keyword);
+
+        return Response.ok(notes).build();
+    }
+    */
 
     @POST
     @Consumes(MediaType.APPLICATION_JSON)
     @Produces(MediaType.APPLICATION_JSON)
     public Response create(final DBNote param) {
-        /*
-        DBNote note = noteDAO.createNote(param);
-        */
 
-        final DBNote note = new DBNote();
+        NoteDAO dao = new NoteDAO(entityManager);
 
-        note.setUser(param.getUser());
-        note.setGroup(param.getGroup());
-        note.setTitle(param.getTitle());
-        note.setDate(new Date());
-
-        this.entityManager.persist(note);
+        DBNote note = dao.createNote(param);
 
         return Response.ok(note).build();
     }
@@ -68,21 +83,11 @@ public class NoteCRUD {
     @Produces({ MediaType.APPLICATION_JSON})
     @Path("/{id}")
     public Response update(@PathParam("id") final long id, DBNote edit){
-        DBNote note;
-        // TODO group edit?
 
-        edit.setId(id);
+        NoteDAO dao = new NoteDAO(entityManager);
 
-        note = entityManager.find(DBNote.class, id);
+        DBNote note = dao.editNote(id, edit);
 
-        if (note != null) {
-            note.setTitle(edit.getTitle());
-            /*TODO Date for edit?*/
-            entityManager.merge(note);
-        }
-        /*
-        note = noteDAO.editNote(id, edit);
-        */
         return Response.ok(note).build();
     }
 
@@ -90,18 +95,22 @@ public class NoteCRUD {
     @DELETE
     @Path("/{id}")
     public Response delete(@PathParam("id") final long id){
-        /*
-        DBNote note;
-        note = noteDAO.deleteNote(id);
-        */
-        DBNote note;
 
-        note = this.entityManager.find(DBNote.class, id);
+        NoteDAO dao = new NoteDAO(entityManager);
 
-        if (note != null) {
-            this.entityManager.remove(note);
-        }
+        DBNote note = dao.deleteNote(id);
 
         return Response.ok(note).build();
+    }
+
+    @DELETE
+    @Path("/{forbidden}")
+    public Response deleteAllNotesContaining(@PathParam("forbidden") final String forbidden){
+
+        NoteDAO dao = new NoteDAO(entityManager);
+
+        List<DBNote> deletedNotes = dao.deleteAllNotesContaining(forbidden);
+
+        return Response.ok(deletedNotes).build();
     }
 }

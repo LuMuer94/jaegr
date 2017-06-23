@@ -4,20 +4,19 @@ import javax.persistence.Entity;
 import javax.persistence.ManyToMany;
 import javax.persistence.OneToMany;
 import javax.xml.bind.annotation.XmlRootElement;
+import java.util.List;
 import java.util.Set;
 
-/**
- * Created by Leon on 09.06.2017.
- */
 @Entity
 @XmlRootElement
 public class DBUser extends DBIdentified {
     private String name;
-    @ManyToMany
-    private Set<DBGroup> groups;
-    @OneToMany
-    private Set<DBNote> notes;
 
+    private String passwordHash;
+
+    private Set<DBUser> friends;
+
+    private Set<DBNote> notes;
 
     public String getName() {
         return name;
@@ -27,14 +26,16 @@ public class DBUser extends DBIdentified {
         this.name = name;
     }
 
-    public Set<DBGroup> getGroups() {
-        return groups;
+    @ManyToMany
+    public Set<DBUser> getFriends() {
+        return friends;
     }
 
-    public void setGroups(Set<DBGroup> groups) {
-        this.groups = groups;
+    public void setFriends(Set<DBUser> friends) {
+        this.friends = friends;
     }
 
+    @OneToMany(mappedBy = "user")
     public Set<DBNote> getNotes() {
         return notes;
     }
@@ -42,5 +43,12 @@ public class DBUser extends DBIdentified {
     public void setNotes(Set<DBNote> notes) {
         this.notes = notes;
     }
-}
 
+    public String getPasswordHash() {
+        return passwordHash;
+    }
+
+    public void setPasswordHash(String passwordHash) {
+        this.passwordHash = passwordHash;
+    }
+}

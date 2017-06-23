@@ -58,4 +58,6 @@ public class NewsCRUD {
 
 		return Response.ok(news).build();
 	}
+
+	// TODO notes by userid ; notes by groupid ; notes/bygroup/.... ; notes/{searchcriteria}
 }

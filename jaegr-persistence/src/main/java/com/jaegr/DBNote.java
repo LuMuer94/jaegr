@@ -1,32 +1,27 @@
 package com.jaegr;
 
-import javax.persistence.Entity;
-import javax.persistence.OneToOne;
-import javax.persistence.Temporal;
-import javax.persistence.TemporalType;
+import javax.persistence.*;
 import javax.xml.bind.annotation.XmlRootElement;
 import java.util.Date;
+import java.util.Set;
 
 /**
  * Created by Leon on 09.06.2017.
  */
 @Entity
 @XmlRootElement
-public class DBNote extends DBIdentified{
-    private DBGroup group;
-    @OneToOne
+public class DBNote extends DBIdentified {
+    private Set<DBUser> recipients;
+
     private DBUser user;
+
     private String title;
+
     private Date date;
 
-    public DBGroup getGroup() {
-        return group;
-    }
+    private boolean privacy;
 
-    public void setGroup(DBGroup group) {
-        this.group = group;
-    }
-
+    @ManyToOne
     public DBUser getUser() {
         return user;
     }
@@ -50,5 +45,22 @@ public class DBNote extends DBIdentified{
 
     public void setDate(Date date) {
         this.date = date;
+    }
+
+    public boolean isPrivacy() {
+        return privacy;
+    }
+
+    public void setPrivacy(boolean privacy) {
+        this.privacy = privacy;
+    }
+
+    @ManyToMany
+    public Set<DBUser> getRecipients() {
+        return recipients;
+    }
+
+    public void setRecipients(Set<DBUser> recipients) {
+        this.recipients = recipients;
     }
 }
