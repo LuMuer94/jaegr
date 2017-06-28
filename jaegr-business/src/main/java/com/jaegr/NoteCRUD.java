@@ -4,6 +4,7 @@ package com.jaegr;
     TODO ++  Create GroupCRUD ++ CRUD Funktionen für Notes, User und Group implementieren
      */
 import com.jaegr.daos.NoteDAO;
+import org.json.simple.JSONObject;
 
 import javax.persistence.EntityManager;
 import javax.persistence.PersistenceContext;
@@ -21,10 +22,22 @@ import java.util.Set;
 @Transactional
 public class NoteCRUD {
 
+    @GET
+    @Produces(MediaType.APPLICATION_JSON)
+    public JSONObject getNotes(){
+        NoteDAO dao = new NoteDAO(entityManager);
+        List<DBNote> notes =  dao.getList();
+        JsonHelper jsonHelper = new JsonHelper();
+        return jsonHelper.toJSonNotes(notes);
+
+    }
+
     @PersistenceContext
     private EntityManager entityManager;
 
-
+    /*
+    Methode um (zu testzwecken) alle gespeicherten Notes ausgeben zu lassen.
+     */
     @Path("/{id}")
     @GET
     @Consumes(MediaType.TEXT_PLAIN)
@@ -37,6 +50,10 @@ public class NoteCRUD {
 
         return Response.ok(notesByUser).build();
     }
+
+    //TODO: wie wird getNotesByCriteria im GET-request aufgerufen? Wo kommen die parameter maxresult und keyword her?
+    //Das selbe bei den anderen methoden.
+
 
     @Path("/{id}")
     @GET

@@ -23,6 +23,20 @@ public class NoteDAO extends BaseDAO {
         super(entityManager);
     }
 
+    /*
+    Gibt stumpf alle Notes zurück die sich in der Datenbank befinden.
+     */
+    public List<DBNote> getList(){
+        final CriteriaBuilder builder = this.entityManager.getCriteriaBuilder();
+        final CriteriaQuery<DBNote> query = builder.createQuery(DBNote.class);
+
+        final Root<DBNote> from = query.from(DBNote.class);
+
+        List<DBNote> notes = this.entityManager.createQuery(query).getResultList();
+
+        return notes;
+    }
+
     public DBNote createNote(DBNote param){
 
         final DBNote note = new DBNote();

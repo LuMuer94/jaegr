@@ -11,7 +11,7 @@ import java.util.Set;
  */
 @Entity
 @XmlRootElement
-public class DBNote extends DBIdentified {
+public class DBNote extends DBIdentified{
     private Set<DBUser> recipients;
 
     private DBUser user;
@@ -68,4 +68,6 @@ public class DBNote extends DBIdentified {
     public void setRecipients(Set<DBUser> recipients) {
         this.recipients = recipients;
     }
+
+
 }

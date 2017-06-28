@@ -1,6 +1,7 @@
 package com.jaegr;
 
 import javax.persistence.Entity;
+import javax.persistence.FetchType;
 import javax.persistence.ManyToMany;
 import javax.persistence.OneToMany;
 import javax.xml.bind.annotation.XmlRootElement;
@@ -26,8 +27,8 @@ public class DBUser extends DBIdentified {
     public void setName(String name) {
         this.name = name;
     }
-
-    @ManyToMany
+    //Fetch type to prevent Hibernate LazyInitializationException
+    @ManyToMany(fetch= FetchType.EAGER)
     public Set<DBUser> getFriends() {
         if (friends == null) {
             friends = new HashSet<DBUser>();

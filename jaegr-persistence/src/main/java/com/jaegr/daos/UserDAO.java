@@ -27,6 +27,16 @@ public class UserDAO extends BaseDAO{
         return String.valueOf(password.hashCode());
     }
 
+    public List<DBUser> getList(){
+        final CriteriaBuilder builder = this.entityManager.getCriteriaBuilder();
+        final CriteriaQuery<DBUser> query = builder.createQuery(DBUser.class);
+
+        final Root<DBUser> from = query.from(DBUser.class);
+
+        List<DBUser> users = this.entityManager.createQuery(query).getResultList();
+        return users;
+    }
+
     public Set<DBNote> getNotesByUser(long id){
         /*
         final CriteriaBuilder builder = this.entityManager.getCriteriaBuilder();
