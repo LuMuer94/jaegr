@@ -12,16 +12,14 @@ import java.util.Set;
 @Entity
 @XmlRootElement
 public class DBNote extends DBIdentified{
-    private Set<DBUser> recipients;
-
     private DBUser user;
 
     private String title;
+    private String content;
 
     private Date date;
 
-    //TODO Enum
-    private boolean privacy;
+    private DBGroup group;
 
     @ManyToOne
     public DBUser getUser() {
@@ -49,25 +47,20 @@ public class DBNote extends DBIdentified{
         this.date = date;
     }
 
-    public boolean isPrivacy() {
-        return privacy;
+    @ManyToOne
+    public DBGroup getGroup() {
+        return group;
     }
 
-    public void setPrivacy(boolean privacy) {
-        this.privacy = privacy;
+    public void setGroup(DBGroup group) {
+        this.group = group;
     }
 
-    @ManyToMany
-    public Set<DBUser> getRecipients() {
-        if (recipients == null) {
-            recipients = new HashSet<DBUser>();
-        }
-        return recipients;
+    public String getContent() {
+        return content;
     }
 
-    public void setRecipients(Set<DBUser> recipients) {
-        this.recipients = recipients;
+    public void setContent(String content) {
+        this.content = content;
     }
-
-
 }

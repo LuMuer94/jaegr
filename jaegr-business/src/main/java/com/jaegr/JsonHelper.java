@@ -53,7 +53,7 @@ public class JsonHelper {
 
     public JSONObject toJSon(DBNote note){
         Date date = note.getDate();
-        Set<DBUser> recipients = note.getRecipients();
+        //Set<DBUser> recipients = note.getRecipients();
         String title = note.getTitle();
         DBUser owner = note.getUser();
         long id = note.getId();
@@ -65,7 +65,7 @@ public class JsonHelper {
         jobj.put("Date", date);
 
         JSONArray jarray = new JSONArray();
-        recipients.forEach(n -> jarray.add(n.getName()));
+        //recipients.forEach(n -> jarray.add(n.getName()));
 
         jobj.put("Recipients", jarray);
 

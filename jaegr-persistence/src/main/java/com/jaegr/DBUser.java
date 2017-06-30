@@ -20,6 +20,10 @@ public class DBUser extends DBIdentified {
 
     private Set<DBNote> notes;
 
+    private Set<DBGroup> groups;
+
+    private boolean disabled;
+
     public String getName() {
         return name;
     }
@@ -27,13 +31,9 @@ public class DBUser extends DBIdentified {
     public void setName(String name) {
         this.name = name;
     }
-    //Fetch type to prevent Hibernate LazyInitializationException
-    @ManyToMany(fetch= FetchType.EAGER)
-    public Set<DBUser> getFriends() {
-        if (friends == null) {
-            friends = new HashSet<DBUser>();
-        }
 
+    @ManyToMany
+    public Set<DBUser> getFriends() {
         return friends;
     }
 
@@ -43,10 +43,6 @@ public class DBUser extends DBIdentified {
 
     @OneToMany(mappedBy = "user")
     public Set<DBNote> getNotes() {
-        if (notes == null) {
-            notes = new HashSet<DBNote>();
-        }
-
         return notes;
     }
 
@@ -60,5 +56,22 @@ public class DBUser extends DBIdentified {
 
     public void setPasswordHash(String passwordHash) {
         this.passwordHash = passwordHash;
+    }
+
+    @ManyToMany(mappedBy = "users")
+    public Set<DBGroup> getGroups() {
+        return groups;
+    }
+
+    public void setGroups(Set<DBGroup> groups) {
+        this.groups = groups;
+    }
+
+    public boolean isDisabled() {
+        return disabled;
+    }
+
+    public void setDisabled(boolean disabled) {
+        this.disabled = disabled;
     }
 }

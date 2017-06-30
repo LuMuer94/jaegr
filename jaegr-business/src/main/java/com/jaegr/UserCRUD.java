@@ -1,14 +1,14 @@
 package com.jaegr;
 
 import com.jaegr.daos.UserDAO;
+import com.jaegr.model.CreateUserParam;
+import com.jaegr.model.UserView;
 import org.json.simple.JSONObject;
 
 import javax.persistence.EntityManager;
 import javax.persistence.PersistenceContext;
 import javax.transaction.Transactional;
-import javax.ws.rs.GET;
-import javax.ws.rs.Path;
-import javax.ws.rs.Produces;
+import javax.ws.rs.*;
 import javax.ws.rs.core.MediaType;
 import java.util.List;
 
@@ -21,21 +21,46 @@ public class UserCRUD {
     @PersistenceContext
     private EntityManager entityManager;
 
-    /*
-    Da user eine referenz auf andere user enthalten wird, sofern einfach eine list mit allen usern zurückgegeben wird,
-    eine unendliche liste zurückgegeben. Deshalb werden hier nur die namen zurückgegeben.
-     */
-    //TODO: Find a way to give back the Users without creating a potential infinit list.
-    // Maybe parse it to json yourself?
-    @Path("/names")
+    @Path("/create")
+    @POST
+    @Consumes(MediaType.APPLICATION_JSON)
+    public void createUser(CreateUserParam createUserParam) {
+        UserDAO dao = new UserDAO(entityManager);
+        dao.create(createUserParam);
+    }
+
+    @DELETE
+    public void disableUser() {
+        long currentId = 0;
+
+        UserDAO dao = new UserDAO(entityManager);
+        dao.disable(0);
+    }
+
+    @Path("/current")
     @GET
     @Produces(MediaType.APPLICATION_JSON)
-    public JSONObject getUserList(){
-        UserDAO dao = new UserDAO(this.entityManager);
-        List<DBUser> list = dao.getList();
+    public UserView getCurrent() {
+        //ToDo: Shiro
+        long currentId = 0;
 
-        JsonHelper jhelper = new JsonHelper();
+        UserDAO dao = new UserDAO(entityManager);
+        //ToDo: exception, UserNotFound
+        DBUser user = dao.get(currentId);
+        return new UserView(user);
+    }
 
-        return jhelper.toJSonUsers(list);
+    // /users?id=1
+    // /users/1
+    // /users/current
+    @Path("/{id}")
+    @GET
+    @Produces(MediaType.APPLICATION_JSON)
+    public UserView get(@PathParam("id") long id) {
+        UserDAO dao = new UserDAO(entityManager);
+
+        //ToDo: exception user not found
+        DBUser user = dao.get(id);
+        return new UserView(user);
     }
 }

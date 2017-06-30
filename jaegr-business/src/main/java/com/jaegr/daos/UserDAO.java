@@ -3,6 +3,7 @@ package com.jaegr.daos;
 import com.jaegr.DBNote;
 import com.jaegr.DBUser;
 import com.jaegr.DBUser_;
+import com.jaegr.model.CreateUserParam;
 
 import javax.persistence.EntityManager;
 import javax.persistence.criteria.CriteriaBuilder;
@@ -48,15 +49,32 @@ public class UserDAO extends BaseDAO{
         return get(id).getNotes();
     }
 
-    public DBUser create(String name, String password) {
+    public DBUser create(CreateUserParam p) {
         DBUser user = new DBUser();
-        user.setName(name);
-        user.setPasswordHash(hashPassword(password));
+        user.setName(p.getName());
+        user.setPasswordHash(hashPassword(p.getPassword()));
         //ToDo: assign to default groups
         //ToDo: maybe check for name duplicate
 
         entityManager.persist(user);
         return user;
+    }
+
+    public void disable(long id) {
+        //ToDo
+    }
+
+    public Set<DBUser> getFriends(long id) {
+        //ToDo
+        return null;
+    }
+
+    public void addFriend(long id, long friendId) {
+        //ToDo
+    }
+
+    public void removeFriend(long id, long friendId) {
+        //ToDo
     }
 
     public void delete(long id) {

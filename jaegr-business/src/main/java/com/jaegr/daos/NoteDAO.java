@@ -43,7 +43,6 @@ public class NoteDAO extends BaseDAO {
         /*TODO Session ID?! */
         /*TODO Validate input*/
         note.setUser(param.getUser());
-        note.setRecipients(param.getRecipients());
         note.setTitle(param.getTitle());
         note.setDate(new Date());
         //TODO Enum Privacy
@@ -146,7 +145,7 @@ public class NoteDAO extends BaseDAO {
     }
     */
 
-    public Set<DBNote> getNotesByCriteria(long id, int maxResults, String keyword){
+    /*public Set<DBNote> getNotesByCriteria(long id, int maxResults, String keyword){
 
         List<DBNote> candidates;
 
@@ -181,7 +180,7 @@ public class NoteDAO extends BaseDAO {
         }
 
         return selection;
-    }
+    }*/
     /*
     public Set<DBNote> getNotesByFriends(long id, int maxResults){
 

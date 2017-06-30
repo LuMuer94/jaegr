@@ -107,7 +107,6 @@ public class StartupBean {
 		dart.setDate(new Date());
 		dart.setTitle("Dart interface planen");
 		dart.setUser(danny);
-		dart.setRecipients(friends);
 
 		entityManager.persist(json);
 		entityManager.persist(dart);
