@@ -2,14 +2,17 @@ package com.jaegr;
 
 import com.jaegr.daos.UserDAO;
 import com.jaegr.model.CreateUserParam;
+import com.jaegr.model.UpdateUserParam;
 import com.jaegr.model.UserView;
 import org.json.simple.JSONObject;
 
 import javax.persistence.EntityManager;
 import javax.persistence.PersistenceContext;
+import javax.print.attribute.standard.Media;
 import javax.transaction.Transactional;
 import javax.ws.rs.*;
 import javax.ws.rs.core.MediaType;
+import javax.ws.rs.core.Response;
 import java.util.List;
 
 /**
@@ -35,6 +38,18 @@ public class UserCRUD {
 
         UserDAO dao = new UserDAO(entityManager);
         dao.disable(0);
+    }
+
+    @Path("/update")
+    @POST
+    @Consumes(MediaType.APPLICATION_JSON)
+    @Produces(MediaType.APPLICATION_JSON)
+    public Response updateUser(long id, UpdateUserParam updateUserParam){
+        UserDAO dao = new UserDAO(entityManager);
+
+        DBUser user = dao.update(id, updateUserParam);
+
+        return Response.ok(new UserView(user)).build();
     }
 
     @Path("/current")

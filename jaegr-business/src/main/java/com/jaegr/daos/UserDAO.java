@@ -5,6 +5,7 @@ import com.jaegr.DBNote;
 import com.jaegr.DBUser;
 import com.jaegr.DBUser_;
 import com.jaegr.model.CreateUserParam;
+import com.jaegr.model.UpdateUserParam;
 
 import javax.persistence.EntityManager;
 import javax.persistence.criteria.CriteriaBuilder;
@@ -106,13 +107,11 @@ public class UserDAO extends BaseDAO{
         entityManager.merge(user);
     }
 
-    public void delete(long id) {
-        entityManager.remove(get(id));
-    }
-
-    public void update(long id, String newUsername, String newPassword) {
+    public DBUser update(long id, UpdateUserParam param) {
         DBUser user = get(id);
         HashMap updateMap = new HashMap<String, Object>();
+        String newUsername = param.getNewName();
+        String newPassword = param.getNewPassword();
 
         if(newUsername != null && !newUsername.isEmpty())
             updateMap.put(DBUser_.name.getName(), newUsername);
@@ -121,6 +120,8 @@ public class UserDAO extends BaseDAO{
             updateMap.put(DBUser_.passwordHash.getName(), hashPassword(newPassword));
 
         entityManager.refresh(user, updateMap);
+
+        return user;
     }
 
     public DBUser get(long id) {

@@ -41,6 +41,13 @@ public class DBGroup extends DBIdentified {
         this.users = users;
     }
 
+    public boolean addUser(DBUser user){
+        if (users == null) {
+            users = new HashSet<DBUser>();
+        }
+        return this.users.add(user);
+    }
+
     public String getName() {
         return name;
     }
@@ -58,6 +65,13 @@ public class DBGroup extends DBIdentified {
 
     public void setAdmins(Set<DBUser> admins) {
         this.admins = admins;
+    }
+
+    public boolean addAdmin(DBUser user){
+        if (admins == null) {
+            admins = new HashSet<DBUser>();
+        }
+        return this.admins.add(user);
     }
 
     public boolean removeUser(DBUser user){

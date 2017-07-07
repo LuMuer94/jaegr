@@ -50,11 +50,21 @@ public class DBUser extends DBIdentified {
 
     @OneToMany(mappedBy = "user")
     public Set<DBNote> getNotes() {
+        if(notes == null){
+            notes = new HashSet<DBNote>();
+        }
         return notes;
     }
 
     public void setNotes(Set<DBNote> notes) {
         this.notes = notes;
+    }
+
+    public boolean addNote(DBNote note){
+        if(notes == null){
+            notes = new HashSet<DBNote>();
+        }
+        return notes.add(note);
     }
 
     public String getPasswordHash() {
@@ -75,6 +85,13 @@ public class DBUser extends DBIdentified {
 
     public void setGroups(Set<DBGroup> groups) {
         this.groups = groups;
+    }
+
+    public boolean addGroup(DBGroup group){
+        if (groups == null) {
+            groups = new HashSet<DBGroup>();
+        }
+        return this.groups.add(group);
     }
 
     public boolean isDisabled() {

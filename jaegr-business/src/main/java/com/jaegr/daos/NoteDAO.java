@@ -66,9 +66,7 @@ public class NoteDAO extends BaseDAO {
 
         this.entityManager.persist(note);
 
-        Set<DBNote> notes = user.getNotes();
-        notes.add(note);
-        user.setNotes(notes);
+        user.addNote(note);
 
         this.entityManager.merge(user);
 
@@ -80,6 +78,7 @@ public class NoteDAO extends BaseDAO {
 
         if (note != null) {
             note.setTitle(edit.getTitle());
+            note.setContent(edit.getContent());
             note.setDate(new Date());
             entityManager.merge(note);
         }
@@ -92,7 +91,6 @@ public class NoteDAO extends BaseDAO {
         DBNote note = this.entityManager.find(DBNote.class, noteId);
 
         if (note != null) {
-
             this.entityManager.remove(note);
 
         }

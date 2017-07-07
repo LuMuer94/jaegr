@@ -33,9 +33,8 @@ public class GroupDAO extends BaseDAO{
 
     public DBGroup create(long id, DBGroup group){
         String name = group.getName();
-        DBUser user = getUser(id); //Wahrscheinlich schon in Dart sichergestellt
+        DBUser user = getUser(id);
         Set<DBUser> users = group.getUsers();
-        Set<DBUser> admins = new HashSet<DBUser>();
 
         if(isDuplicate(name)){
             //ToDO NameAlreadyInUseException ?
@@ -44,11 +43,10 @@ public class GroupDAO extends BaseDAO{
         if(name == null && name.isEmpty()){
             //ToDo NoNameException
         }
-        admins.add(user);
-        users.add(user);
+        //users.add(user);
         DBGroup newGroup = new DBGroup();
         newGroup.setName(name);
-        newGroup.setAdmins(admins);
+        newGroup.addAdmin(user);
         newGroup.setUsers(users);
 
         entityManager.persist(newGroup);
@@ -65,16 +63,11 @@ public class GroupDAO extends BaseDAO{
         if(!group.getAdmins().contains(user)){
             //ToDo NoPermissionException
         }
-        Set<DBUser> users = group.getUsers();
-        users.add(friend);
-        group.setUsers(users);
+        group.addUser(friend);
 
-        Set<DBGroup> groups = friend.getGroups();
-        groups.add(group);
-        friend.setGroups(groups);
+        friend.addGroup(group);
 
-
-        entityManager.merge(users);
+        entityManager.merge(group);
         entityManager.merge(friend);
 
         return group;
@@ -93,11 +86,9 @@ public class GroupDAO extends BaseDAO{
             //ToDo NotAvailableException
         }
 
-        Set<DBUser> admins = group.getAdmins();
-        admins.add(newAdmin);
-        group.setUsers(admins);
+        group.addAdmin(newAdmin);
 
-        entityManager.merge(admins);
+        entityManager.merge(group);
 
         return group;
     }
