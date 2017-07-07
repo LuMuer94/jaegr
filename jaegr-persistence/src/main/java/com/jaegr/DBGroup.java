@@ -56,6 +56,7 @@ public class DBGroup extends DBIdentified {
         this.name = name;
     }
 
+    @OneToMany
     public Set<DBUser> getAdmins() {
         if (admins == null) {
             admins = new HashSet<DBUser>();
