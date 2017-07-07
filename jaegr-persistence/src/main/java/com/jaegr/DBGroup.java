@@ -1,7 +1,10 @@
 package com.jaegr;
 
+import javax.persistence.Entity;
 import javax.persistence.ManyToMany;
 import javax.persistence.OneToMany;
+import javax.xml.bind.annotation.XmlRootElement;
+import java.util.HashSet;
 import java.util.Set;
 
 
@@ -9,6 +12,8 @@ import java.util.Set;
 /**
  * Created by jonas on 30.06.17.
  */
+@Entity
+@XmlRootElement
 public class DBGroup extends DBIdentified {
     private Set<DBNote> notes;
     private Set<DBUser> users;
@@ -26,6 +31,9 @@ public class DBGroup extends DBIdentified {
 
     @ManyToMany
     public Set<DBUser> getUsers() {
+        if (users == null) {
+            users = new HashSet<DBUser>();
+        }
         return users;
     }
 
@@ -42,10 +50,17 @@ public class DBGroup extends DBIdentified {
     }
 
     public Set<DBUser> getAdmins() {
+        if (admins == null) {
+            admins = new HashSet<DBUser>();
+        }
         return admins;
     }
 
     public void setAdmins(Set<DBUser> admins) {
         this.admins = admins;
+    }
+
+    public boolean removeUser(DBUser user){
+        return this.users.remove(user);
     }
 }

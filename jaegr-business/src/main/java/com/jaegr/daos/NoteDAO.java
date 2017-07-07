@@ -1,6 +1,7 @@
 package com.jaegr.daos;
 //TODO Delete Note -> user
 
+import com.jaegr.DBGroup;
 import com.jaegr.DBNote;
 import com.jaegr.DBNote_;
 import com.jaegr.DBUser;
@@ -8,7 +9,6 @@ import com.jaegr.DBUser;
 import javax.persistence.EntityManager;
 import javax.persistence.criteria.CriteriaBuilder;
 import javax.persistence.criteria.CriteriaQuery;
-import javax.persistence.criteria.Order;
 import javax.persistence.criteria.Root;
 import java.util.*;
 
@@ -37,33 +37,46 @@ public class NoteDAO extends BaseDAO {
         return notes;
     }
 
+    public Set<DBNote> getNotesByGroup(long id){
+
+        DBGroup group = getGroup(id);
+
+        return group.getNotes();
+    }
+
+
+    public Set<DBNote> getNotesByUser(long id){
+
+        DBUser user = getUser(id);
+
+        return user.getNotes();
+    }
+
     public DBNote createNote(DBNote param){
+        final long id = param.getGroup().getId();
+        DBGroup group = getGroup(id);
+        DBUser user = param.getUser(); //Dart?
+        DBNote note = new DBNote();
 
-        final DBNote note = new DBNote();
-        /*TODO Session ID?! */
-        /*TODO Validate input*/
-        note.setUser(param.getUser());
+        note.setUser(user);
+        note.setGroup(group);
         note.setTitle(param.getTitle());
+        note.setTitle(param.getContent());
         note.setDate(new Date());
-        //TODO Enum Privacy
-
 
         this.entityManager.persist(note);
 
-        Set<DBNote> notes = param.getUser().getNotes();
+        Set<DBNote> notes = user.getNotes();
         notes.add(note);
-        param.getUser().setNotes(notes);
+        user.setNotes(notes);
+
+        this.entityManager.merge(user);
 
         return note;
     }
 
     public DBNote editNote(long id, DBNote edit){
-
-        DBNote note;
-
-        edit.setId(id);
-
-        note = entityManager.find(DBNote.class, id);
+        DBNote note = entityManager.find(DBNote.class, id);
 
         if (note != null) {
             note.setTitle(edit.getTitle());
@@ -75,42 +88,16 @@ public class NoteDAO extends BaseDAO {
 
     }
 
-    public DBNote deleteNote(long id) {
-
-        DBNote note;
-
-        note = this.entityManager.find(DBNote.class, id);
+    public DBNote deleteNote(long noteId) {
+        DBNote note = this.entityManager.find(DBNote.class, noteId);
 
         if (note != null) {
-
-            removeNotesFromUser(note);
 
             this.entityManager.remove(note);
 
         }
 
         return note;
-    }
-
-    public List<DBNote> deleteAllNotesContaining(String forbidden) {
-
-
-        final CriteriaBuilder builder = this.entityManager.getCriteriaBuilder();
-        final CriteriaQuery<DBNote> query = builder.createQuery(DBNote.class);
-
-        final Root<DBNote> from = query.from(DBNote.class);
-
-        query.where(builder.equal(from.get(DBNote_.title), forbidden));
-        List<DBNote> notes = this.entityManager.createQuery(query).getResultList();
-
-        for(DBNote note : notes){
-
-            removeNotesFromUser(note);
-
-            this.entityManager.remove(note);
-        }
-
-        return notes;
     }
 
     /*
@@ -144,52 +131,7 @@ public class NoteDAO extends BaseDAO {
 
     }
     */
-
-    /*public Set<DBNote> getNotesByCriteria(long id, int maxResults, String keyword){
-
-        List<DBNote> candidates;
-
-        DBUser user = get(id);
-
-        Set<DBUser> friends = user.getFriends();
-
-        // Sort "maxResults" notes by date
-        final CriteriaBuilder builder = this.entityManager.getCriteriaBuilder();
-        final CriteriaQuery<DBNote> query = builder.createQuery(DBNote.class);
-
-        final Root<DBNote> from = query.from(DBNote.class);
-
-        final Order order = builder.desc(from.get(DBNote_.date));
-
-        query.select(from).orderBy(order);
-
-        candidates = this.entityManager.createQuery(query).setMaxResults(maxResults).getResultList();
-
-        // Select notes:
-        // + directed to the user (id)  + written by a friend + title contains keyword
-        Set<DBNote> selection = null;
-        // TODO PRIVACY
-        for(DBNote candidate : candidates){
-            if(friends.contains(candidate.getUser())){
-                if(candidate.getRecipients().contains(user)){
-                    if(candidate.getTitle().contains("keyword")){
-                        selection.add(candidate);
-                    }
-                }
-            }
-        }
-
-        return selection;
-    }*/
     /*
-    public Set<DBNote> getNotesByFriends(long id, int maxResults){
-
-        List<DBNote> candidates;
-
-        DBUser user = get(id);
-
-        Set<DBUser> friends = user.getFriends();
-
         // Sort "maxResults" notes by date
         final CriteriaBuilder builder = this.entityManager.getCriteriaBuilder();
         final CriteriaQuery<DBNote> query = builder.createQuery(DBNote.class);
@@ -200,25 +142,9 @@ public class NoteDAO extends BaseDAO {
 
         query.select(from).orderBy(order);
 
-        candidates = this.entityManager.createQuery(query).setMaxResults(maxResults).getResultList();
-
-        // Select notes:
-        // + directed to the user (id)  + written by a friend
-        Set<DBNote> selection = null;
-        // TODO PRIVACY
-        for(DBNote candidate : candidates){
-            if(friends.contains(candidate.getUser())){
-                if(candidate.getRecipients().contains(user)){
-                    selection.add(candidate);
-                }
-            }
-        }
-
-        return selection;
-    }
     */
 
-    public DBUser get(long id) {
+    public DBUser getUser(long id) {
 
         DBUser user = entityManager.find(DBUser.class, id);
 
@@ -229,21 +155,14 @@ public class NoteDAO extends BaseDAO {
         return user;
     }
 
-    public void removeNotesFromUser(DBNote note){
-        Set<DBNote> notes;
-        DBUser user;
+    public DBGroup getGroup(long id) {
 
-        user = note.getUser();
-        notes = user.getNotes();
-        notes.remove(note);
-        user.setNotes(notes);
+        DBGroup group = entityManager.find(DBGroup.class, id);
+
+        if(group == null) {
+            //ToDo: GroupNotFoundException
+        }
+
+        return group;
     }
-
-    public Set<DBNote> getNotesByUser(long id){
-
-        DBUser user = get(id);
-
-        return user.getNotes();
-    }
-
 }

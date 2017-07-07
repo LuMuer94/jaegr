@@ -1,5 +1,6 @@
 package com.jaegr.daos;
 
+import com.jaegr.DBGroup;
 import com.jaegr.DBNote;
 import com.jaegr.DBUser;
 import com.jaegr.DBUser_;
@@ -61,20 +62,48 @@ public class UserDAO extends BaseDAO{
     }
 
     public void disable(long id) {
-        //ToDo
+        DBUser user = get(id);
+        user.setDisabled(true);
+
+        entityManager.merge(user);
     }
 
     public Set<DBUser> getFriends(long id) {
-        //ToDo
-        return null;
+        return get(id).getFriends();
     }
 
     public void addFriend(long id, long friendId) {
-        //ToDo
+        DBUser user = get(id);
+        DBUser friend = get(friendId);
+
+        user.addFriend(friend);
+
+        entityManager.merge(user);
     }
 
     public void removeFriend(long id, long friendId) {
-        //ToDo
+        DBUser user = get(id);
+        DBUser friend = get(friendId);
+        Set<DBUser> friends = user.getFriends();
+
+        final CriteriaBuilder cb = entityManager.getCriteriaBuilder();
+        final CriteriaQuery<DBUser> query = cb.createQuery(DBUser.class);
+
+        final Root<DBUser> from = query.from(DBUser.class);
+        query.select(from)
+                .where(cb.or(
+                        cb.equal(from.get(DBUser_.id), id),
+                        cb.equal(from.get(DBUser_.id), friendId))
+                );
+        List<DBUser> users = entityManager.createQuery(query).getResultList();
+        if(users.size() != 2){
+            //ToDO UserNotFoundException
+        }
+
+        friends.remove(friend);
+        user.setFriends(friends);
+
+        entityManager.merge(user);
     }
 
     public void delete(long id) {
@@ -101,6 +130,12 @@ public class UserDAO extends BaseDAO{
         }
 
         return user;
+    }
+
+    public Set<DBGroup> getGroups(long id){
+        DBUser user = get(id);
+
+        return user.getGroups();
     }
 
     public DBUser login(String username, String password) {

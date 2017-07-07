@@ -34,7 +34,14 @@ public class DBUser extends DBIdentified {
 
     @ManyToMany
     public Set<DBUser> getFriends() {
+        if (friends == null) {
+            friends = new HashSet<DBUser>();
+        }
         return friends;
+    }
+
+    public boolean addFriend(DBUser friend){
+        return this.friends.add(friend);
     }
 
     public void setFriends(Set<DBUser> friends) {
@@ -60,6 +67,9 @@ public class DBUser extends DBIdentified {
 
     @ManyToMany(mappedBy = "users")
     public Set<DBGroup> getGroups() {
+        if (groups == null) {
+            groups = new HashSet<DBGroup>();
+        }
         return groups;
     }
 

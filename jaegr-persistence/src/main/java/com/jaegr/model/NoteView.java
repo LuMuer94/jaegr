@@ -3,6 +3,8 @@ package com.jaegr.model;
 import com.jaegr.DBNote;
 
 import java.util.Date;
+import java.util.HashSet;
+import java.util.Set;
 
 /**
  * Created by jonas on 30.06.17.
@@ -20,8 +22,15 @@ public class NoteView {
     private String content;
 
     public NoteView(DBNote note) {
-        //ToDo:
+        this.userName = note.getUser().getName();
+        this.userId = note.getUser().getId();
+        this.groupName = note.getGroup().getName();
+        this.groupId = note.getGroup().getId();
+        this.date = note.getDate();
+        this.title = note.getTitle();
+        this.content = note.getContent();
     }
+
 
     public String getUserName() {
         return userName;

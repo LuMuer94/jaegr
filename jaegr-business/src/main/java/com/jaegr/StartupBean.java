@@ -101,11 +101,13 @@ public class StartupBean {
 		DBNote json = new DBNote();
 		json.setDate(new Date());
 		json.setTitle("Json helper erweitern");
+		json.setContent("jo");
 		json.setUser(danny);
 
 		DBNote dart = new DBNote();
 		dart.setDate(new Date());
 		dart.setTitle("Dart interface planen");
+		dart.setContent("jo");
 		dart.setUser(danny);
 
 		entityManager.persist(json);
