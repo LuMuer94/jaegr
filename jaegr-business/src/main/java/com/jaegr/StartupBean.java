@@ -1,6 +1,10 @@
 package com.jaegr;
 
 import com.jaegr.DBNews;
+import com.jaegr.daos.GroupDAO;
+import com.jaegr.daos.UserDAO;
+import com.jaegr.model.CreateUserParam;
+import org.h2.engine.User;
 
 import javax.annotation.PostConstruct;
 import javax.annotation.PreDestroy;
@@ -63,69 +67,32 @@ public class StartupBean {
 
 	@PostConstruct
 	public void startup2(){
+	    UserDAO userDao = new UserDAO(entityManager);
+        GroupDAO groupDao = new GroupDAO(entityManager);
+
 		//Creating users
-		DBUser leon = new DBUser();
-		leon.setName("Leon");
-		DBUser jonas = new DBUser();
-		jonas.setName("Jonas");
-		DBUser lukas = new DBUser();
-		lukas.setName("Lukas");
-		DBUser danny = new DBUser();
-		danny.setName("Danny");
-		//Adding friends
-		HashSet<DBUser> friends = new HashSet<>();
-		friends.add(jonas);
-		friends.add(lukas);
-		friends.add(danny);
-		leon.setFriends(friends);
+        DBUser admin = userDao.create(new CreateUserParam("admin", "123"), true);
+        DBUser user1 = userDao.create(new CreateUserParam("user1", "abc"), false);
 
-		friends = new HashSet<>();
-		friends.add(leon);
-		friends.add(lukas);
-		friends.add(danny);
-		jonas.setFriends(friends);
+        DBGroup group1 = groupDao.create(admin, "group1");
+        DBGroup group2 = groupDao.create(user1, "group2");
 
-		friends = new HashSet<>();
-		friends.add(jonas);
-		friends.add(leon);
-		friends.add(danny);
-		lukas.setFriends(friends);
+        entityManager.flush();
 
-		friends = new HashSet<>();
-		friends.add(jonas);
-		friends.add(lukas);
-		friends.add(leon);
-		danny.setFriends(friends);
+        boolean b1 = groupDao.checkIsMember(group1.getId(), admin);
+        boolean b2 = groupDao.checkIsMember(group1.getId(), user1);
+
+        System.out.println("IsMember: " + b1 + " " + b2 + ":" + group2.getId() + ", " + user1.getId());
+
+
 
 		//Creating notes
-		DBNote json = new DBNote();
-		json.setDate(new Date());
-		json.setTitle("Json helper erweitern");
-		json.setContent("jo");
-		json.setUser(danny);
-
-		DBNote dart = new DBNote();
-		dart.setDate(new Date());
-		dart.setTitle("Dart interface planen");
-		dart.setContent("jo");
-		dart.setUser(danny);
-
-		entityManager.persist(json);
-		entityManager.persist(dart);
-
-		if(!entityManager.contains(danny)){
-			entityManager.persist(danny);
-		}
-		if(!entityManager.contains(jonas)){
-			entityManager.persist(jonas);
-		}
-		if(!entityManager.contains(leon)){
-			entityManager.persist(leon);
-		}
-		if(!entityManager.contains(lukas)){
-			entityManager.persist(lukas);
-		}
-
+		DBNote noteJson = new DBNote();
+        noteJson.setDate(new Date());
+        noteJson.setTitle("Json helper erweitern");
+        noteJson.setContent("jo");
+        noteJson.setUser(admin);
+		entityManager.persist(noteJson);
 	}
 
 	@PreDestroy

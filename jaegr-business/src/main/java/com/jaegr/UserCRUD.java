@@ -1,23 +1,27 @@
 package com.jaegr;
 
+import com.jaegr.auth.permission.EitherAdminOrOwnerPermission;
 import com.jaegr.daos.UserDAO;
 import com.jaegr.model.CreateUserParam;
 import com.jaegr.model.UpdateUserParam;
+import com.jaegr.model.SearchUserParam;
 import com.jaegr.model.UserView;
-import org.json.simple.JSONObject;
+import org.apache.shiro.authz.annotation.RequiresGuest;
+import org.apache.shiro.authz.annotation.RequiresUser;
 
 import javax.persistence.EntityManager;
 import javax.persistence.PersistenceContext;
-import javax.print.attribute.standard.Media;
 import javax.transaction.Transactional;
 import javax.ws.rs.*;
 import javax.ws.rs.core.MediaType;
-import javax.ws.rs.core.Response;
-import java.util.List;
+import java.util.Set;
+import java.util.stream.Collectors;
 
 /**
  * Created by danny on 28.06.17.
  */
+
+//ToDo: handle user disabled
 @Path("/users")
 @Transactional
 public class UserCRUD {
@@ -27,55 +31,60 @@ public class UserCRUD {
     @Path("/create")
     @POST
     @Consumes(MediaType.APPLICATION_JSON)
-    public void createUser(CreateUserParam createUserParam) {
+    @Produces(MediaType.APPLICATION_JSON)
+    @RequiresGuest
+    public UserView createUser(CreateUserParam createUserParam) {
         UserDAO dao = new UserDAO(entityManager);
-        dao.create(createUserParam);
+        return new UserView(dao.create(createUserParam, false));
     }
 
+    @Path("/{id}")
     @DELETE
-    public void disableUser() {
-        long currentId = 0;
-
-        UserDAO dao = new UserDAO(entityManager);
-        dao.disable(0);
+    @RequiresUser
+    public void disableUser(@PathParam("id") long id) {
+        CRUDUtils.checkPermission(new EitherAdminOrOwnerPermission(id));
+        new UserDAO(entityManager).disable(id);
     }
 
-    @Path("/update")
+    @Path("/{id}/update")
     @POST
     @Consumes(MediaType.APPLICATION_JSON)
     @Produces(MediaType.APPLICATION_JSON)
-    public Response updateUser(long id, UpdateUserParam updateUserParam){
-        UserDAO dao = new UserDAO(entityManager);
+    @RequiresUser
+    public UserView updateUser(@PathParam("id") long id, UpdateUserParam updateUserParam){
+        CRUDUtils.checkPermission(new EitherAdminOrOwnerPermission(id));
+        return new UserView(new UserDAO(entityManager).update(id, updateUserParam));
+    }
 
-        DBUser user = dao.update(id, updateUserParam);
-
-        return Response.ok(new UserView(user)).build();
+    @Path("/{id:[0-9]}")
+    @GET
+    @Produces(MediaType.APPLICATION_JSON)
+    @RequiresUser
+    public UserView get(@PathParam("id") long id) {
+        CRUDUtils.checkPermission(new EitherAdminOrOwnerPermission(id));
+        return new UserView(new UserDAO(entityManager).get(id));
     }
 
     @Path("/current")
     @GET
     @Produces(MediaType.APPLICATION_JSON)
+    @RequiresUser
     public UserView getCurrent() {
-        //ToDo: Shiro
-        long currentId = 0;
-
-        UserDAO dao = new UserDAO(entityManager);
-        //ToDo: exception, UserNotFound
-        DBUser user = dao.get(currentId);
-        return new UserView(user);
+        long id = CRUDUtils.getCurrentUserId();
+        return new UserView(new UserDAO(entityManager).get(id));
     }
 
-    // /users?id=1
-    // /users/1
-    // /users/current
-    @Path("/{id}")
-    @GET
+    @Path("/search")
+    @POST
+    @Consumes(MediaType.APPLICATION_JSON)
     @Produces(MediaType.APPLICATION_JSON)
-    public UserView get(@PathParam("id") long id) {
+    @RequiresUser
+    public Set<UserView> search(SearchUserParam p){
         UserDAO dao = new UserDAO(entityManager);
-
-        //ToDo: exception user not found
-        DBUser user = dao.get(id);
-        return new UserView(user);
+        return dao.search(p.getLikeName()).stream()
+                .map(u -> new UserView(u))
+                .collect(Collectors.toSet());
     }
+
+
 }

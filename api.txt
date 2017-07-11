@@ -1,0 +1,31 @@
+Rest:
+
+
+--users
+POST /users/create CreateUserParam -> UserView
+GET /users/{id} -> UserView
+POST /users/{id}/update UpdateUserParam -> UserView
+DELETE /users/{id}
+POST /users/search SearchUserParam -> Set<UserView>
+
+--friends
+GET /friends/{id} -> Set<UserView>
+POST /friends/{id}/add/{friendId}
+POST /friends/{id}/remove/{friendId}
+
+--groups
+GET /groups/{id} -> UserView
+DELETE /groups/{id}
+GET /groups -> Set<GroupView> (for current user)
+POST /groups -> createGroup -> GroupView
+POST /groups -> createGroup -> GroupView
+POST /groups/{id}/add/{userId}
+POST /groups/{id}/remove/{userId}
+
+--notes
+GET /notes -> Set<NoteView> (for current user)
+GET /notes/byGroup/{id} -> Set<NoteView>
+GET /{id} -> NoteView
+DELETE /{id}
+POST /notes/{id}/edit EditNoteParam -> NoteView
+POST /notes/create CreateNoteParam -> NoteView

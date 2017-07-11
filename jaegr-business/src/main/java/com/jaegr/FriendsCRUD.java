@@ -1,8 +1,10 @@
 package com.jaegr;
 
+import com.jaegr.auth.permission.EitherAdminOrOwnerPermission;
 import com.jaegr.daos.UserDAO;
-import com.jaegr.model.FriendParam;
 import com.jaegr.model.UserView;
+import org.apache.shiro.authz.annotation.RequiresAuthentication;
+import org.apache.shiro.authz.annotation.RequiresUser;
 
 import javax.persistence.EntityManager;
 import javax.persistence.PersistenceContext;
@@ -23,33 +25,35 @@ public class FriendsCRUD {
 
     @Path("/{id}")
     @GET
+    @RequiresUser
     public Set<UserView> getFriends(@PathParam("id") long id) {
+        CRUDUtils.checkPermission(new EitherAdminOrOwnerPermission(id));
+
         UserDAO dao = new UserDAO(entityManager);
-        return dao.getFriends(id).stream()
+        return dao.get(id).getFriends().stream()
                 .map(u -> new UserView(u))
                 .collect(Collectors.toSet());
     }
 
-    @Path("/add/{id}")
+    @Path("/{id}/add/{friendId}")
     @POST
-    @Consumes(MediaType.APPLICATION_JSON)
-    public void add(FriendParam friend) {
-        //toDo:
-        long currentId = 0;
+    @RequiresUser
+    public void add(@PathParam("id") long id, @PathParam("friendId") long friendId) {
+        CRUDUtils.checkPermission(new EitherAdminOrOwnerPermission(id));
 
         UserDAO dao = new UserDAO(entityManager);
-        dao.addFriend(currentId, friend.getId());
+        dao.addFriend(id, friendId);
     }
 
-    @Path("/remove/{id}")
+    @Path("/{id}/remove/{friendId}")
     @DELETE
     @Consumes(MediaType.APPLICATION_JSON)
-    public void remove(FriendParam friend) {
-        //toDo:
-        long currentId = 0;
+    @RequiresUser
+    public void remove(@PathParam("id") long id, @PathParam("friendId") long friendId) {
+        CRUDUtils.checkPermission(new EitherAdminOrOwnerPermission(id));
 
         UserDAO dao = new UserDAO(entityManager);
-        dao.removeFriend(currentId, friend.getId());
+        dao.removeFriend(id, friendId);
     }
 
 }

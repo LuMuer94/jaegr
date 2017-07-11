@@ -1,13 +1,13 @@
 package com.jaegr;
 
-    /*
-    TODO ++  Create GroupCRUD ++ CRUD Funktionen für Notes, User und Group implementieren
-     */
+import com.jaegr.auth.permission.EitherAdminOrAllowed;
+import com.jaegr.auth.permission.EitherAdminOrOwnerPermission;
+import com.jaegr.daos.GroupDAO;
 import com.jaegr.daos.NoteDAO;
 import com.jaegr.daos.UserDAO;
-import com.jaegr.model.NoteView;
-import com.jaegr.model.UserView;
-import org.json.simple.JSONObject;
+import com.jaegr.model.*;
+import org.apache.shiro.authz.annotation.RequiresAuthentication;
+import org.apache.shiro.authz.annotation.RequiresUser;
 
 import javax.persistence.EntityManager;
 import javax.persistence.PersistenceContext;
@@ -15,7 +15,6 @@ import javax.transaction.Transactional;
 import javax.ws.rs.*;
 import javax.ws.rs.core.MediaType;
 import javax.ws.rs.core.Response;
-import java.util.List;
 import java.util.Set;
 import java.util.stream.Collectors;
 
@@ -30,93 +29,84 @@ public class NoteCRUD {
     private EntityManager entityManager;
 
     @GET
+    @Path("/byUser/{id}")
     @Produces(MediaType.APPLICATION_JSON)
-    public JSONObject getNotes(){
-        NoteDAO dao = new NoteDAO(entityManager);
-        List<DBNote> notes =  dao.getList();
-        JsonHelper jsonHelper = new JsonHelper();
-        return jsonHelper.toJSonNotes(notes);
+    @RequiresUser
+    public Set<NoteView> getNotesByUser(@PathParam("id") final long userId){
+        UserDAO dao = new UserDAO(entityManager);
+        DBUser user = dao.get(userId);
 
-    }
-    /*
-    Methode um (zu testzwecken) alle gespeicherten Notes ausgeben zu lassen.
-     */
-    @GET
-    @Path("/{id}")
-    @Produces(MediaType.APPLICATION_JSON)
-    public Response getNoteByUser(@PathParam("id") final long id){
+        CRUDUtils.checkPermission(new EitherAdminOrOwnerPermission(user));
 
-        NoteDAO dao = new NoteDAO(entityManager);
-
-        Set<NoteView> notesByUser = dao.getNotesByUser(id).stream()
-                .map(u -> new NoteView(u))
+        return user.getNotes().stream()
+                .map(n -> new NoteView(n))
                 .collect(Collectors.toSet());
-
-        return Response.ok(notesByUser).build();
     }
 
     @GET
-    @Path("/{id}")
+    @Path("/byGroup/{id}")
     @Produces(MediaType.APPLICATION_JSON)
-    public Response getNoteByGroup(@PathParam("id") final long id){
-
+    @RequiresUser
+    public Set<NoteView> getNotesByGroup(@PathParam("id") final long groupId){
         NoteDAO dao = new NoteDAO(entityManager);
 
-        Set<NoteView> notesByGroup = dao.getNotesByGroup(id).stream()
+        UserDAO userDao = new UserDAO(entityManager);
+        DBUser user = userDao.get(CRUDUtils.getCurrentUserId());
+
+        GroupDAO groupDao = new GroupDAO(entityManager);
+        boolean isMember = groupDao.checkIsMember(groupId, user);
+        CRUDUtils.checkPermission(new EitherAdminOrAllowed(isMember));
+
+        return dao.getNotesByGroup(groupId).stream()
                 .map(u -> new NoteView(u))
                 .collect(Collectors.toSet());
-
-        return Response.ok(notesByGroup).build();
     }
 
+    @Path("/create")
     @POST
     @Consumes(MediaType.APPLICATION_JSON)
     @Produces(MediaType.APPLICATION_JSON)
-    public Response create(final DBNote param) {
+    @RequiresUser
+    public NoteView create(final CreateNoteParam param) {
+        UserDAO userDao = new UserDAO(entityManager);
+        DBUser user = userDao.get(CRUDUtils.getCurrentUserId());
+
+        GroupDAO groupDao = new GroupDAO(entityManager);
+        boolean isMember = groupDao.checkIsMember(param.getGroupId(), user);
+        CRUDUtils.checkPermission(new EitherAdminOrAllowed(isMember));
+
 
         NoteDAO dao = new NoteDAO(entityManager);
-
-        DBNote note = dao.createNote(param);
-
-        return Response.ok(new NoteView(note)).build();
+        DBNote note = dao.createNote(user, param);
+        return new NoteView(note);
     }
 
     @POST
-    @Path("/{id}")
+    @Path("/{id}/edit")
     @Consumes({ MediaType.APPLICATION_JSON })
     @Produces({ MediaType.APPLICATION_JSON})
-    public Response update(@PathParam("id") final long noteId, DBNote edit){
-
+    @RequiresUser
+    public NoteView edit(@PathParam("id") final long id, EditNoteParam param){
         NoteDAO dao = new NoteDAO(entityManager);
+        DBNote note = dao.get(id);
 
-        DBNote note = dao.editNote(noteId, edit);
+        CRUDUtils.checkPermission(new EitherAdminOrOwnerPermission(note.getUser()));
 
-        return Response.ok(new NoteView(note)).build();
+        note = dao.editNote(id, param);
+        return new NoteView(note);
     }
 
 
     @DELETE
     @Path("/{id}")
+    @RequiresUser
     public Response delete(@PathParam("id") final long id){
-
         NoteDAO dao = new NoteDAO(entityManager);
+        DBNote note = dao.get(id);
 
-        DBNote note = dao.deleteNote(id);
+        CRUDUtils.checkPermission(new EitherAdminOrOwnerPermission(note.getUser()));
 
-        return Response.ok(new NoteView(note)).build();
+        dao.deleteNote(id);
+        return Response.ok().build();
     }
-    //ToDo:
-    /*
-    create(groupId)
-    update(change content)
-    delete(check owner) -> Shiro?
-
-    get notes by user
-    get notes by groups
-    get
-
-    noteview ->
-     */
-
-
 }

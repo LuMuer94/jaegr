@@ -36,8 +36,8 @@
 				</plugin>
 			</plugins>
 		</pluginManagement>
-		<plugins>
 
+		<plugins>
 			<plugin>
 				<groupId>com.github.dzwicker.dart</groupId>
 				<artifactId>dart-maven-plugin</artifactId>
@@ -66,17 +66,23 @@
 							<goal>pub</goal>
 						</goals>
 						<configuration>
-							<pubCommand>build</pubCommand>
-							<pubOptions>
-								<pubOption>--output=${project.build.directory}/dart</pubOption>
-								<pubOption>--mode=debug</pubOption>
-							</pubOptions>
 						</configuration>
 					</execution>
 				</executions>
 			</plugin>
 
-			<plugin>
+
+            <plugin>
+                <groupId>org.wildfly.swarm</groupId>
+                <artifactId>wildfly-swarm-plugin</artifactId>
+                <version>${wildfly-swarm.version}</version>
+                <configuration>
+                    <fractions>jpa,cdi,ejb,jaxrs</fractions>
+                </configuration>
+            </plugin>
+
+
+            <plugin>
 				<groupId>org.apache.maven.plugins</groupId>
 				<artifactId>maven-war-plugin</artifactId>
 				<version>3.1.0</version>

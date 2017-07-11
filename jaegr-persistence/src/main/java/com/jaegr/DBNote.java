@@ -13,12 +13,9 @@ import java.util.Set;
 @XmlRootElement
 public class DBNote extends DBIdentified{
     private DBUser user;
-
     private String title;
     private String content;
-
     private Date date;
-
     private DBGroup group;
 
     @ManyToOne
