@@ -40,19 +40,6 @@ public class UserDAO extends BaseDAO{
         user.setPasswordSalt(salt);
     }
 
-    public List<DBUser> getList() {
-        final CriteriaBuilder builder = this.entityManager.getCriteriaBuilder();
-        final CriteriaQuery<DBUser> query = builder.createQuery(DBUser.class);
-
-        final Root<DBUser> from = query.from(DBUser.class);
-
-        return this.entityManager.createQuery(query).getResultList();
-    }
-
-    public Set<DBNote> getNotes(long id){
-        return get(id).getNotes();
-    }
-
     public DBUser create(CreateUserParam p, boolean isAdmin) {
         DBUser user = new DBUser();
         user.setName(p.getName());
@@ -125,7 +112,7 @@ public class UserDAO extends BaseDAO{
         final CriteriaQuery<DBUser> query = cb.createQuery(DBUser.class);
 
         final Root<DBUser> from = query.from(DBUser.class);
-        query.select(from).where(cb.like(from.get(DBUser_.name), likeName));//ToDo: verify pattern
+        query.select(from).where(cb.like(from.get(DBUser_.name), likeName + "%"));
         return entityManager.createQuery(query).getResultList();
     }
 

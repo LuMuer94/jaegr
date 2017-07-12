@@ -39,7 +39,7 @@ public class NoteCRUD {
         CRUDUtils.checkPermission(new EitherAdminOrOwnerPermission(user));
 
         return user.getNotes().stream()
-                .map(n -> new NoteView(n))
+                .map(NoteView::new)
                 .collect(Collectors.toSet());
     }
 
@@ -55,10 +55,10 @@ public class NoteCRUD {
 
         GroupDAO groupDao = new GroupDAO(entityManager);
         boolean isMember = groupDao.checkIsMember(groupId, user);
-        CRUDUtils.checkPermission(new EitherAdminOrAllowed(isMember));
+        //CRUDUtils.checkPermission(new EitherAdminOrAllowed(isMember));
 
         return dao.getNotesByGroup(groupId).stream()
-                .map(u -> new NoteView(u))
+                .map(NoteView::new)
                 .collect(Collectors.toSet());
     }
 
@@ -73,8 +73,8 @@ public class NoteCRUD {
 
         GroupDAO groupDao = new GroupDAO(entityManager);
         boolean isMember = groupDao.checkIsMember(param.getGroupId(), user);
-        CRUDUtils.checkPermission(new EitherAdminOrAllowed(isMember));
-
+        //CRUDUtils.checkPermission(new EitherAdminOrAllowed(isMember));
+        System.out.println("---->Is member:" + isMember);
 
         NoteDAO dao = new NoteDAO(entityManager);
         DBNote note = dao.createNote(user, param);

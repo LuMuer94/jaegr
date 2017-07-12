@@ -22,7 +22,7 @@ public class DatabaseAuthenticator {
             DBUser user = dao.getByName(userPwToken.getUsername());
 
             if (user == null)
-                throw new AuthenticationException("Either wrong username or password");
+                throw new AuthenticationException("Unknown User");
 
             if(user.isDisabled())
                 throw new AuthenticationException("User is no longer active");
