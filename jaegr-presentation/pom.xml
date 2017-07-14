@@ -56,7 +56,6 @@
 							<goal>pub</goal>
 						</goals>
 						<configuration>
-							<pubCommand>get</pubCommand>
 						</configuration>
 					</execution>
 					<execution>

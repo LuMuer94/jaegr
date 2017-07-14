@@ -9,11 +9,13 @@ public class UserView {
     private String name;
     private long id;
     private boolean disabled;
+    private boolean isAdmin;
 
     public UserView(DBUser user) {
         this.name = user.getName();
         this.id = user.getId();
         this.disabled = user.isDisabled();
+        this.isAdmin = user.isAdmin();
     }
 
     public String getName() {
@@ -26,5 +28,9 @@ public class UserView {
 
     public boolean isDisabled() {
         return disabled;
+    }
+
+    public boolean isAdmin() {
+        return isAdmin;
     }
 }

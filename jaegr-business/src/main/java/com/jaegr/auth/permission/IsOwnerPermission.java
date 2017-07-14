@@ -6,28 +6,27 @@ import org.apache.shiro.authz.Permission;
 import org.apache.shiro.subject.Subject;
 
 /**
- * Created by jonas on 10.07.17.
+ * Created by jonas on 13.07.17.
  */
-//ToDo: make permissions properly
-public class EitherAdminOrOwnerPermission implements Permission {
+public class IsOwnerPermission implements Permission {
     private long ownerId;
 
-    public EitherAdminOrOwnerPermission(DBUser owner) {
+    public IsOwnerPermission(DBUser owner) {
         ownerId = owner.getId();
     }
 
-    public EitherAdminOrOwnerPermission(long userId) {
+    public IsOwnerPermission(long userId) {
         ownerId = userId;
     }
 
     @Override
     public boolean implies(Permission permission) {
-        return check();
+        return false;
     }
 
     public boolean check() {
         Subject subject = SecurityUtils.getSubject();
-        return subject.hasRole("admin") || (Long) subject.getPrincipal() == this.ownerId;
+        return (Long)subject.getPrincipal() == this.ownerId;
 
     }
 }
