@@ -1,0 +1,20 @@
+<div>
+    <h3>Registration</h3>
+    <form>
+        <dl>
+            <dt>
+                <label for="username">Username</label>
+            </dt>
+            <dd>
+                <input [(ngModel)]="model.username" id="username" type="text" required>
+            </dd>
+            <dt>
+                <label for="password">Password</label>
+            </dt>
+            <dd>
+                <input [(ngModel)]="model.password" id="password" type="text" required>
+            </dd>
+        </dl>
+        <button type="submit" (click)="registerUser($event)">Register</button>
+    </form>
+</div>
