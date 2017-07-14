@@ -4,8 +4,9 @@ import 'mock_notes.dart';
 import 'mock_user.dart';
 @Injectable()
 class Service{
-  getGroup(int groupId){return groups;}
-  getNote(int noteId){return notes;}
+  getGroup(int groupId) => groups.firstWhere((g) => g.id == groupId, orElse: () => null);
+  getNote(int noteId) => notes.firstWhere((n) => n.id == noteId, orElse:  () => null);
+  getUser(int userId) => users.firstWhere((u) => u.id == userId, orElse:  () => null);
   getUserTest() => users;
   getGroupsTest() => groups;
   getNotesTest() => notes;
