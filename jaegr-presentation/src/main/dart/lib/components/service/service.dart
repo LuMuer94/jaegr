@@ -4,7 +4,9 @@ import 'mock_notes.dart';
 import 'mock_user.dart';
 @Injectable()
 class Service{
-  getUser() => users;
-  getGroups() => groups;
-  getNotes() => notes;
+  getGroup(int groupId){return groups;}
+  getNote(int noteId){return notes;}
+  getUserTest() => users;
+  getGroupsTest() => groups;
+  getNotesTest() => notes;
 }
