@@ -82,9 +82,6 @@ public class StartupBean {
         boolean b1 = groupDao.checkIsMember(group1.getId(), admin);
         boolean b2 = groupDao.checkIsMember(group1.getId(), user1);
 
-        System.out.println("IsMember: " + b1 + " " + b2 + ":" + group2.getId() + ", " + user1.getId());
-
-
 
 		//Creating notes
 		DBNote noteJson = new DBNote();

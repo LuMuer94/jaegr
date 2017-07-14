@@ -25,15 +25,14 @@ public class DatabaseAuthorizer {
     private EntityManager entityManager;
 
     public AuthorizationInfo fetchAuthorizationInfo(PrincipalCollection principals) {
-        Long userId = (Long)principals.getPrimaryPrincipal();
+        Long userId = (Long) principals.getPrimaryPrincipal();
         UserDAO dao = new UserDAO(entityManager);
         DBUser user = dao.get(userId);
 
-        if(user.isDisabled()) {
+        if (user.isDisabled()) {
             throw new AuthorizationException("Disabled user");
         }
 
-        System.out.println("Getting auth info: " + user.getName());
 
         return new AuthorizationInfo() {
             @Override
@@ -52,7 +51,7 @@ public class DatabaseAuthorizer {
 
             @Override
             public Collection<Permission> getObjectPermissions() {
-                if(user.isAdmin()) {
+                if (user.isAdmin()) {
                     return Collections.singleton(new AdminPermission());
                 } else {
                     return Collections.singleton(new UserPermission());

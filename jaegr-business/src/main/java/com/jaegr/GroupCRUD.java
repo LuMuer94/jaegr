@@ -94,9 +94,14 @@ public class GroupCRUD {
 
         CRUDUtils.checkPermission(new IsOwnerPermission(group.getOwner()));
 
+        //Owner can not be deleted
+        if(group.getOwner().getId() == userId) {
+            throw new NotAcceptableException();//ToDo: proper exception
+        }
+
         UserDAO userDao = new UserDAO(entityManager);
-        DBUser userToAdd = userDao.get(userId);
-        group.getUsers().remove(userToAdd);
+        DBUser userToRemove = userDao.get(userId);
+        group.getUsers().remove(userToRemove);
 
         return Response.ok().build();
     }
