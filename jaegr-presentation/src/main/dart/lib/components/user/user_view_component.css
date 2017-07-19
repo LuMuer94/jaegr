@@ -79,12 +79,12 @@ button.delete {
 .notes li.selected:hover {
     color: white;
 }
-.groups li:hover {
+.notes li:hover {
     color: #607D8B;
     background-color: #EEE;
     left: .1em;
 }
-.groups .text {
+.notes .text {
     position: relative;
     top: -3px;
 }

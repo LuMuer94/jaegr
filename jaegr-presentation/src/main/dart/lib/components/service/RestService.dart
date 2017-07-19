@@ -9,6 +9,9 @@ import 'dart:async';
 import 'dart:convert';
 import 'dart:html';
 
+import 'package:angular2/angular2.dart';
+
+@Injectable()
 class RestService extends AbstractService {
 
   String baseUrl = "..";
