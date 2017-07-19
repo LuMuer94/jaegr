@@ -7,7 +7,7 @@
         <span class="badge">{{group.id}}</span> {{group.name}}
     </li>
 </ul>
-<div *ngIf="selectedGroup != null">
+<div class="notes" *ngIf="selectedGroup != null">
     <h2>
         {{selectedGroup.name | uppercase}} is selected
     </h2>

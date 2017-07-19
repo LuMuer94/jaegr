@@ -1,7 +1,7 @@
 import 'dart:async';
-import 'package:jaegr/model/GroupView.dart';
-import 'package:jaegr/model/NoteView.dart';
-import 'package:jaegr/model/UserView.dart';
+import 'package:jaegr/model/group.dart';
+import 'package:jaegr/model/note.dart';
+import 'package:jaegr/model/user.dart';
 abstract class AbstractService{
   Future<User> getCurrentUser();
   Future<User> getUserById(int id);

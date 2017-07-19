@@ -3,6 +3,7 @@
     color: white;
 }
 .groups {
+    float:left;
     margin: 0 0 2em 0;
     list-style-type: none;
     padding: 0;
@@ -43,6 +44,11 @@
     height: 1.8em;
     margin-right: .8em;
     border-radius: 4px 0px 0px 4px;
+}
+
+.notes {
+    float:left;
+    background-color: #BBD8DC;
 }
 
 button.delete {
