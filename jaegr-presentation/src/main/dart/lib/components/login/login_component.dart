@@ -1,5 +1,6 @@
 import 'dart:async';
 import 'package:angular2/angular2.dart';
+import 'package:jaegr/components/service/MockService.dart';
 import 'dart:html';
 import 'package:jaegr/components/service/RestService.dart';
 import 'package:jaegr/model/user.dart';
@@ -14,7 +15,7 @@ class Login implements OnInit {
   User user;
 
 
-  final RestService restService;
+  final MockService restService;
 
   Login(this.restService);
 
