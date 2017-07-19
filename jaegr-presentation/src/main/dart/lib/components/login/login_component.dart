@@ -18,9 +18,9 @@ class Login implements OnInit {
 
   Login(this.restService);
 
-  Future<Null> login(dynamic e) async {
+  Future login(dynamic e) async {
     e.preventDefault();
-    restService.login(username, password);
+    await restService.login(username, password);
     if (await Util.isloggedIn(restService)) {
       loggedIn = true;
     } else {
