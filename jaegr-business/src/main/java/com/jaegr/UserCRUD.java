@@ -1,12 +1,11 @@
 package com.jaegr;
 
-import com.jaegr.auth.permission.EitherAdminOrOwnerPermission;
+import com.jaegr.auth.permission.IsOwnerPermission;
 import com.jaegr.daos.UserDAO;
 import com.jaegr.model.CreateUserParam;
-import com.jaegr.model.UpdateUserParam;
 import com.jaegr.model.SearchUserParam;
+import com.jaegr.model.UpdateUserParam;
 import com.jaegr.model.UserView;
-import org.apache.shiro.authz.annotation.RequiresGuest;
 import org.apache.shiro.authz.annotation.RequiresUser;
 
 import javax.persistence.EntityManager;
@@ -32,7 +31,6 @@ public class UserCRUD {
     @POST
     @Consumes(MediaType.APPLICATION_JSON)
     @Produces(MediaType.APPLICATION_JSON)
-    @RequiresGuest
     public UserView createUser(CreateUserParam createUserParam) {
         UserDAO dao = new UserDAO(entityManager);
         return new UserView(dao.create(createUserParam, false));
@@ -42,7 +40,7 @@ public class UserCRUD {
     @DELETE
     @RequiresUser
     public void disableUser(@PathParam("id") long id) {
-        CRUDUtils.checkPermission(new EitherAdminOrOwnerPermission(id));
+        CRUDUtils.checkPermission(new IsOwnerPermission(id));
         new UserDAO(entityManager).disable(id);
     }
 
@@ -52,7 +50,7 @@ public class UserCRUD {
     @Produces(MediaType.APPLICATION_JSON)
     @RequiresUser
     public UserView updateUser(@PathParam("id") long id, UpdateUserParam updateUserParam){
-        CRUDUtils.checkPermission(new EitherAdminOrOwnerPermission(id));
+        CRUDUtils.checkPermission(new IsOwnerPermission(id));
         return new UserView(new UserDAO(entityManager).update(id, updateUserParam));
     }
 
@@ -61,7 +59,7 @@ public class UserCRUD {
     @Produces(MediaType.APPLICATION_JSON)
     @RequiresUser
     public UserView get(@PathParam("id") long id) {
-        CRUDUtils.checkPermission(new EitherAdminOrOwnerPermission(id));
+        CRUDUtils.checkPermission(new IsOwnerPermission(id));
         return new UserView(new UserDAO(entityManager).get(id));
     }
 

@@ -1,25 +1,27 @@
-import 'dart:convert';
-
-import 'package:jaegr/model/group.dart';
-import 'package:jaegr/model/user.dart';
-
-class Note {
-  //int id;
-  User user;
+import 'User.dart';
+class Note{
+  User author;
   String title;
   String content;
+  String groupName;
+  int groupId;
+  int id;
+
+
+  private DBUser user;
+  private String title;
+  private String content;
+  private Date date;
+  private DBGroup group;
+
   DateTime date;
-  Group group;
+  Note(this.owner, this.groupName, this.groupId, this.id, this.date);
 
-
-  String toJSON() {
-    return JSON.encode({
-      'user':user,
-      'title':title,
-      'content':content,
-      'date':date,
-      'group':group
-    });
+  Note.fromJson(Map json){
+    this.owner = json["owner"];
+    this.groupName = json ["groupName"];
+    this.groupId = json ["groupId"];
+    this.id = json ["id"];
+    this.date = json ["date"];
   }
-
 }

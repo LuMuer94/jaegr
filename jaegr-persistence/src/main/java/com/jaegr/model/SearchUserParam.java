@@ -6,6 +6,9 @@ package com.jaegr.model;
 public class SearchUserParam {
     private String likeName;
 
+    public SearchUserParam() {
+    }
+
     public String getLikeName() {
         return likeName;
     }

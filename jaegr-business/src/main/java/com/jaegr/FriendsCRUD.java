@@ -1,9 +1,8 @@
 package com.jaegr;
 
-import com.jaegr.auth.permission.EitherAdminOrOwnerPermission;
+import com.jaegr.auth.permission.IsOwnerPermission;
 import com.jaegr.daos.UserDAO;
 import com.jaegr.model.UserView;
-import org.apache.shiro.authz.annotation.RequiresAuthentication;
 import org.apache.shiro.authz.annotation.RequiresUser;
 
 import javax.persistence.EntityManager;
@@ -27,7 +26,7 @@ public class FriendsCRUD {
     @GET
     @RequiresUser
     public Set<UserView> getFriends(@PathParam("id") long id) {
-        CRUDUtils.checkPermission(new EitherAdminOrOwnerPermission(id));
+        CRUDUtils.checkPermission(new IsOwnerPermission(id));
 
         UserDAO dao = new UserDAO(entityManager);
         return dao.get(id).getFriends().stream()
@@ -39,7 +38,7 @@ public class FriendsCRUD {
     @POST
     @RequiresUser
     public void add(@PathParam("id") long id, @PathParam("friendId") long friendId) {
-        CRUDUtils.checkPermission(new EitherAdminOrOwnerPermission(id));
+        CRUDUtils.checkPermission(new IsOwnerPermission(id));
 
         UserDAO dao = new UserDAO(entityManager);
         dao.addFriend(id, friendId);
@@ -50,7 +49,7 @@ public class FriendsCRUD {
     @Consumes(MediaType.APPLICATION_JSON)
     @RequiresUser
     public void remove(@PathParam("id") long id, @PathParam("friendId") long friendId) {
-        CRUDUtils.checkPermission(new EitherAdminOrOwnerPermission(id));
+        CRUDUtils.checkPermission(new IsOwnerPermission(id));
 
         UserDAO dao = new UserDAO(entityManager);
         dao.removeFriend(id, friendId);

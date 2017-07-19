@@ -1,12 +1,11 @@
 package com.jaegr;
 
-import com.jaegr.auth.permission.EitherAdminOrAllowed;
-import com.jaegr.auth.permission.EitherAdminOrOwnerPermission;
+import com.jaegr.auth.permission.IsGroupMemberPermission;
+import com.jaegr.auth.permission.IsOwnerPermission;
 import com.jaegr.daos.GroupDAO;
 import com.jaegr.daos.NoteDAO;
 import com.jaegr.daos.UserDAO;
 import com.jaegr.model.*;
-import org.apache.shiro.authz.annotation.RequiresAuthentication;
 import org.apache.shiro.authz.annotation.RequiresUser;
 
 import javax.persistence.EntityManager;
@@ -36,7 +35,7 @@ public class NoteCRUD {
         UserDAO dao = new UserDAO(entityManager);
         DBUser user = dao.get(userId);
 
-        CRUDUtils.checkPermission(new EitherAdminOrOwnerPermission(user));
+        CRUDUtils.checkPermission(new IsOwnerPermission(user));
 
         return user.getNotes().stream()
                 .map(NoteView::new)
@@ -55,7 +54,7 @@ public class NoteCRUD {
 
         GroupDAO groupDao = new GroupDAO(entityManager);
         boolean isMember = groupDao.checkIsMember(groupId, user);
-        //CRUDUtils.checkPermission(new EitherAdminOrAllowed(isMember));
+        CRUDUtils.checkPermission(new IsGroupMemberPermission(isMember));
 
         return dao.getNotesByGroup(groupId).stream()
                 .map(NoteView::new)
@@ -73,8 +72,7 @@ public class NoteCRUD {
 
         GroupDAO groupDao = new GroupDAO(entityManager);
         boolean isMember = groupDao.checkIsMember(param.getGroupId(), user);
-        //CRUDUtils.checkPermission(new EitherAdminOrAllowed(isMember));
-        System.out.println("---->Is member:" + isMember);
+        CRUDUtils.checkPermission(new IsGroupMemberPermission(isMember));
 
         NoteDAO dao = new NoteDAO(entityManager);
         DBNote note = dao.createNote(user, param);
@@ -90,7 +88,7 @@ public class NoteCRUD {
         NoteDAO dao = new NoteDAO(entityManager);
         DBNote note = dao.get(id);
 
-        CRUDUtils.checkPermission(new EitherAdminOrOwnerPermission(note.getUser()));
+        CRUDUtils.checkPermission(new IsOwnerPermission(note.getUser()));
 
         note = dao.editNote(id, param);
         return new NoteView(note);
@@ -104,7 +102,7 @@ public class NoteCRUD {
         NoteDAO dao = new NoteDAO(entityManager);
         DBNote note = dao.get(id);
 
-        CRUDUtils.checkPermission(new EitherAdminOrOwnerPermission(note.getUser()));
+        CRUDUtils.checkPermission(new IsOwnerPermission(note.getUser()));
 
         dao.deleteNote(id);
         return Response.ok().build();

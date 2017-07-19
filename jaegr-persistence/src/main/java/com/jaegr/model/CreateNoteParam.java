@@ -8,6 +8,9 @@ public class CreateNoteParam {
     private String content;
     private long groupId;
 
+    public CreateNoteParam() {
+    }
+
     public String getTitle() {
         return title;
     }

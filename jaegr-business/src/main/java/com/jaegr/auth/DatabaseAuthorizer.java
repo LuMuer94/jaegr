@@ -1,8 +1,11 @@
 package com.jaegr.auth;
 
 import com.jaegr.DBUser;
+import com.jaegr.auth.permission.AdminPermission;
+import com.jaegr.auth.permission.UserPermission;
 import com.jaegr.daos.UserDAO;
 import org.apache.shiro.authc.*;
+import org.apache.shiro.authz.AuthorizationException;
 import org.apache.shiro.authz.AuthorizationInfo;
 import org.apache.shiro.authz.Permission;
 import org.apache.shiro.subject.PrincipalCollection;
@@ -22,11 +25,15 @@ public class DatabaseAuthorizer {
     private EntityManager entityManager;
 
     public AuthorizationInfo fetchAuthorizationInfo(PrincipalCollection principals) {
-        Long userId = (Long)principals.getPrimaryPrincipal();
+        Long userId = (Long) principals.getPrimaryPrincipal();
         UserDAO dao = new UserDAO(entityManager);
         DBUser user = dao.get(userId);
 
-        System.out.println("Getting auth info: " + user.getName());
+        if (user.isDisabled()) {
+            throw new AuthorizationException("Disabled user");
+        }
+
+
         return new AuthorizationInfo() {
             @Override
             public Collection<String> getRoles() {
@@ -44,7 +51,11 @@ public class DatabaseAuthorizer {
 
             @Override
             public Collection<Permission> getObjectPermissions() {
-                return null;//Collections.singleton(new ReadNewsItemPermission());
+                if (user.isAdmin()) {
+                    return Collections.singleton(new AdminPermission());
+                } else {
+                    return Collections.singleton(new UserPermission());
+                }
             }
         };
     }

@@ -1,11 +1,11 @@
 package com.jaegr;
 
-import com.jaegr.auth.permission.EitherAdminOrOwnerPermission;
+import com.jaegr.auth.permission.IsGroupMemberPermission;
+import com.jaegr.auth.permission.IsOwnerPermission;
 import com.jaegr.daos.GroupDAO;
 import com.jaegr.daos.UserDAO;
 import com.jaegr.model.CreateGroupParam;
 import com.jaegr.model.GroupView;
-import org.apache.shiro.authz.annotation.RequiresAuthentication;
 import org.apache.shiro.authz.annotation.RequiresUser;
 
 import javax.persistence.EntityManager;
@@ -34,23 +34,25 @@ public class GroupCRUD {
         DBUser user = userDao.get(CRUDUtils.getCurrentUserId());
 
         boolean isMember = dao.checkIsMember(id, user);
-        //CRUDUtils.checkPermission(new EitherAdminOrOwnerPermission(group.getOwner()));
+        CRUDUtils.checkPermission(new IsGroupMemberPermission(isMember));
 
         return new GroupView(dao.get(id));
     }
 
+    @Path("/byUser/{userId}")
     @GET
     @Produces(MediaType.APPLICATION_JSON)
     @RequiresUser
-    public Set<GroupView> getGroups() {
+    public Set<GroupView> getGroupsByUser(@PathParam("userId") final long userId) {
         UserDAO userDao = new UserDAO(entityManager);
-        DBUser user = userDao.get(CRUDUtils.getCurrentUserId());
 
-        return user.getGroups().stream()
+        CRUDUtils.checkPermission(new IsOwnerPermission(userId));
+        return userDao.get(userId).getGroups().stream()
                 .map(GroupView::new)
                 .collect(Collectors.toSet());
     }
 
+    @Path("/create")
     @POST
     @Consumes(MediaType.APPLICATION_JSON)
     @Produces(MediaType.APPLICATION_JSON)
@@ -73,7 +75,7 @@ public class GroupCRUD {
         GroupDAO dao = new GroupDAO(entityManager);
         DBGroup group = dao.get(id);
 
-        CRUDUtils.checkPermission(new EitherAdminOrOwnerPermission(group.getOwner()));
+        CRUDUtils.checkPermission(new IsOwnerPermission(group.getOwner()));
 
         UserDAO userDao = new UserDAO(entityManager);
         DBUser userToAdd = userDao.get(userId);
@@ -90,11 +92,16 @@ public class GroupCRUD {
         GroupDAO dao = new GroupDAO(entityManager);
         DBGroup group = dao.get(id);
 
-        CRUDUtils.checkPermission(new EitherAdminOrOwnerPermission(group.getOwner()));
+        CRUDUtils.checkPermission(new IsOwnerPermission(group.getOwner()));
+
+        //Owner can not be deleted
+        if(group.getOwner().getId() == userId) {
+            throw new NotAcceptableException();//ToDo: proper exception
+        }
 
         UserDAO userDao = new UserDAO(entityManager);
-        DBUser userToAdd = userDao.get(userId);
-        group.getUsers().remove(userToAdd);
+        DBUser userToRemove = userDao.get(userId);
+        group.getUsers().remove(userToRemove);
 
         return Response.ok().build();
     }
@@ -107,7 +114,7 @@ public class GroupCRUD {
         GroupDAO dao = new GroupDAO(entityManager);
         DBGroup group = dao.get(id);
 
-        CRUDUtils.checkPermission(new EitherAdminOrOwnerPermission(group.getOwner()));
+        CRUDUtils.checkPermission(new IsOwnerPermission(group.getOwner()));
 
         dao.delete(id);
 

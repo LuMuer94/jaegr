@@ -29,8 +29,6 @@ public class DatabaseAuthenticator {
 
             String pwHash = user.getPasswordHash();
             ByteSource salt = ByteSource.Util.bytes(user.getPasswordSalt());
-
-            System.out.println("Logged in:" + user.getId() + "pw:" + new String(userPwToken.getPassword()));
             return new SimpleAccount(user.getId(), pwHash, salt, JaegrRealm.REALM);
         } else {
             throw new AuthenticationException("Unsupported AuthenticationToken");

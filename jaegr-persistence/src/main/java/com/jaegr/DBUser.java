@@ -6,11 +6,15 @@ import java.util.HashSet;
 import java.util.List;
 import java.util.Set;
 
+
+//ToDo: ensure name is unique(not working right now)
+
 @Entity
 @XmlRootElement
 public class DBUser extends DBIdentified {
     @Column(unique=true)
     private String name;
+
     private String passwordHash;
     private String passwordSalt;
     private Set<DBUser> friends;

@@ -6,6 +6,9 @@ package com.jaegr.model;
 public class CreateGroupParam {
     private String name;
 
+    public CreateGroupParam() {
+    }
+
     public String getName() {
         return name;
     }
