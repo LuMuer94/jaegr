@@ -28,7 +28,7 @@ class UserViewComponent implements OnInit{
   //implement as future
   void getGroups()
    {
-    groups =  service.getGroupsTest();
+    //groups =  service.getGroupsTest();
   }
 
   void ngOnInit() {

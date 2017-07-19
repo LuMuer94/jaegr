@@ -1,26 +1,22 @@
 import 'user.dart';
-import 'note.dart';
 
 class Group {
   String name;
   int id;
-  User owner;
-  List<Note> notes;
-  List<User> members;
+  User admin;
+  List<User> users;
 
-  Group( this.name, this.id, this.owner,)
+  Group( this.name, this.id, this.admin,)
   {
-    notes = new List<Note>();
-    members = new List<User>();
-    members.add(owner);
+    users = new List<User>();
+    users.add(admin);
   }
 
   Group.fromJson(Map json){
     this.name = json["name"];
     this.id = json["id"];
-    this.owner= new User.fromJson(json["owner"]);
-    this.notes = json["notes"].map((u) => new Note.fromJson(u));
-    this.members = json["members"].map((u) => new User.fromJson(u));
+    this.admin= new User.fromJson(json["admin"]);
+    this.users = json["users"].map((u) => new User.fromJson(u));
   }
 
 }

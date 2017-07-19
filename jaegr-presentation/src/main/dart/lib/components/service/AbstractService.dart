@@ -1,7 +1,8 @@
+import '../../model/group.dart';
+import '../../model/note.dart';
+import '../../model/user.dart';
 import 'dart:async';
-import 'package:jaegr/model/GroupView.dart';
-import 'package:jaegr/model/NoteView.dart';
-import 'package:jaegr/model/UserView.dart';
+
 abstract class AbstractService{
   Future<User> getCurrentUser();
   Future<User> getUserById(int id);
@@ -15,7 +16,7 @@ abstract class AbstractService{
   Future<Null> removeUserToGroup(int groupId, int userId);
 
   Future<List<Note>> getNotesByUser(int userId);
-  Future<List<Note>> getNOtesByGroup(int groupId);
+  Future<List<Note>> getNotesByGroup(int groupId);
   Future<Note> getNoteById(int id);
   Future<Note> createNote(String title, String content, int groupId);
   Future<Null> deleteNote(int id);

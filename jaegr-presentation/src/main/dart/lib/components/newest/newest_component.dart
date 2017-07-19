@@ -1,3 +1,4 @@
+import '../../model/news.dart';
 import 'package:angular2/angular2.dart';
 import 'dart:convert';
 import 'dart:html';
