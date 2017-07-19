@@ -12,10 +12,9 @@
     <h2>
         {{selectedGroup.name | uppercase}}
     </h2>
-    <ul *ngIf="groupNotes!=null">
+    <ul class="notes" *ngIf="groupNotes!=null">
         <li *ngFor="let note of groupNotes">
-            <p class="title">{{note.title}}</p>
-            <p class="content">{{note.content}}</p>
+            <note [note]="note"></note>
         </li>
     </ul>
 </div>
