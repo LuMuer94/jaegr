@@ -1,5 +1,3 @@
-import 'dart:convert';
-
 class User {
   String name;
   int id;
@@ -15,5 +13,7 @@ class User {
     this.isAdmin = json["isAdmin"];
   }
 
-
+  static List<User> fromJsonList(List json) {
+    return json.map((u) => new User.fromJson(u));
+  }
 }

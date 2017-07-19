@@ -5,6 +5,8 @@ class NoteCreateData {
   String content;
   int groupId;
 
+  NoteCreateData(this.title, this.content, this.groupId);
+
   String toJSON() {
     return JSON.encode({
       'title': title,

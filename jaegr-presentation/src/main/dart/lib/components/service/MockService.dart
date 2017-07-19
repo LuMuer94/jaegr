@@ -107,7 +107,7 @@ class MockService extends AbstractService {
   @override
   Future<Null> login(String username, String password) {
     if(users.any((u) => u.username == username)) {
-      return new Future.value(Null);
+      return new Future.value(null);
     } else {
       return new Future.error("No user not found for login");
     }

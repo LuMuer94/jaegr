@@ -20,4 +20,8 @@ class Note{
     this.groupId = json ["groupId"];
     this.id = json ["id"];
   }
+
+  static List<Note> fromJsonList(List json) {
+    return json.map((u) => new Note.fromJson(u));
+  }
 }
