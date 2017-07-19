@@ -13,7 +13,7 @@ class Register{
   UserCreateData model;
 
   CreateUser(){
-    model = new UserCreateData();
+    model = new UserCreateData("","");
   }
 
   void registerUser(dynamic e){
@@ -23,6 +23,5 @@ class Register{
       'Accept':'application/json'
     };
     HttpRequest.request("../rest/create",method: "POST",sendData: model.toJSON(),requestHeaders: requestHeaders).catchError((n)=>print(n));
-
   }
 }
