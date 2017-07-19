@@ -84,7 +84,8 @@ public class UserDAO extends BaseDAO{
         return user;
     }
 
-    public DBUser get(long id) {
+    public DBUser
+    get(long id) {
         DBUser user = entityManager.find(DBUser.class, id);
         if(user == null) {
             throw new NotFoundException();

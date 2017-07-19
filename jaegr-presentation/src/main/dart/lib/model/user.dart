@@ -15,12 +15,5 @@ class User {
     this.isAdmin = json["isAdmin"];
   }
 
-  String toJSON() {
-    return JSON.encode({
-      'name': name,
-      'id': id,
-      'disabled': disabled,
-      'isAdmin' : isAdmin
-    });
-  }
+
 }

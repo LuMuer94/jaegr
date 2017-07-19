@@ -1,27 +1,23 @@
-import 'User.dart';
+import 'user.dart';
 class Note{
   User author;
   String title;
   String content;
   String groupName;
+  DateTime date;
   int groupId;
   int id;
 
+  Note( this.author, this.title, this.content, this.groupId, this.id, this.date);
 
-  private DBUser user;
-  private String title;
-  private String content;
-  private Date date;
-  private DBGroup group;
-
-  DateTime date;
-  Note(this.owner, this.groupName, this.groupId, this.id, this.date);
 
   Note.fromJson(Map json){
-    this.owner = json["owner"];
+    this.author= new User.fromJson(json["owner"]);
+    this.title= json["title"];
+    this.content = json["content"];
     this.groupName = json ["groupName"];
+    this.date = json ["date"];
     this.groupId = json ["groupId"];
     this.id = json ["id"];
-    this.date = json ["date"];
   }
 }

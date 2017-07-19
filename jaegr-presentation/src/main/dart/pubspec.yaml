@@ -1,24 +1,21 @@
 name: jaegr
-description: JaegR
+description: QuickStart
 version: 0.0.1
 
 environment:
   sdk: '>=1.23.0 <2.0.0'
+
 dependencies:
-  angular2: ^3.1.0
-  http: ^0.11.0
-  stream_transform: ^0.0.5
+  angular2: ^3.0.0
+
 dev_dependencies:
   angular_test: ^1.0.0-beta+2
   browser: ^0.10.0
-  mockito: ^2.0.2
   dart_to_js_script_rewriter: ^1.0.1
   test: ^0.12.0
+
 transformers:
 - angular2:
-    resolved_identifiers:
-      BrowserClient: 'package:http/browser_client.dart'
-      Client: 'package:http/http.dart'
     platform_directives:
     - 'package:angular2/common.dart#COMMON_DIRECTIVES'
     platform_pipes:
@@ -29,6 +26,3 @@ transformers:
 - test/pub_serve:
     $include: test/**_test.dart
 - dart_to_js_script_rewriter
-web:
-  compiler:
-    debug: dartdevc

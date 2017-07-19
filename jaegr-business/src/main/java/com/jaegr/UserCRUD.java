@@ -6,6 +6,7 @@ import com.jaegr.model.CreateUserParam;
 import com.jaegr.model.SearchUserParam;
 import com.jaegr.model.UpdateUserParam;
 import com.jaegr.model.UserView;
+import org.apache.shiro.authz.annotation.RequiresRoles;
 import org.apache.shiro.authz.annotation.RequiresUser;
 
 import javax.persistence.EntityManager;
@@ -66,7 +67,6 @@ public class UserCRUD {
     @Path("/current")
     @GET
     @Produces(MediaType.APPLICATION_JSON)
-    @RequiresUser
     public UserView getCurrent() {
         long id = CRUDUtils.getCurrentUserId();
         return new UserView(new UserDAO(entityManager).get(id));

@@ -1,36 +1,38 @@
 import 'package:angular2/angular2.dart';
 import 'dart:convert';
 import 'dart:async';
-import 'package:http/http.dart';
+import 'dart:html';
 import 'package:jaegr/model/group.dart';
+import 'package:jaegr/model/user.dart';
 
-
+//TODO: complete
 @Injectable()
 class GroupService {
-  static const _groupUrl = '';
 
-  final Client _http;
 
-  GroupService(this._http);
-
-  Future<List<Group>> getGroups() async {
+  Future<List<Group>> getGroups(User user) async {
     try {
-      final response = await _http.get(_groupUrl);
-      final groups = _extractData(response)
+      String path = "../rest/groups/byUser/" + user.id.toString();
+      final response = await HttpRequest.request(
+          path, method: "GET",
+          requestHeaders: {'Accept': 'application/json'});
+      final groups = JSON.decode(response.responseText)
           .map((value) => new Group.fromJson(value))
           .toList();
       return groups;
     } catch (e) {
-      throw _handleError(e);
+      return null;
     }
   }
 
-  dynamic _extractData(Response resp) => JSON.decode(resp.body)['data'];
+
+  /*dynamic _extractData(Response resp) => JSON.decode(resp.body)['data'];
 
   Exception _handleError(dynamic e) {
     print(e); //for demo purposes only
     return new Exception('Server error; cause: $e');
   }
+
 
   Future<Group> getGroup(int id) async {
     try {
@@ -76,5 +78,6 @@ class GroupService {
       throw _handleError(e);
     }
   }
+  */
 
 }

@@ -5,7 +5,7 @@ import 'dart:html';
     selector: 'login',
     templateUrl: 'login_component.html'
 )
-class Login{
+class Login implements OnInit{
 
   String username;
   String password;
@@ -16,7 +16,7 @@ class Login{
   void login(dynamic e){
     e.preventDefault();
     HttpRequest.postFormData("../login.jsp", { "username" : username, "password" : password })
-      .then((request) {loggedIn = true;})
+      .then((request) {loggedIn = true;print(request.getAllResponseHeaders());})
       .catchError((n)=>print(n));
   }
 
@@ -25,5 +25,15 @@ class Login{
     HttpRequest.request("../logout", method: "GET")
       .then((request) {loggedIn = false; print(request.getAllResponseHeaders());})
       .catchError((n)=>print(n));
+  }
+
+
+  @override
+  ngOnInit() {
+    // TODO: implement ngOnInit correctly
+    if( loggedIn == null)
+      {
+        loggedIn=false;
+      }
   }
 }

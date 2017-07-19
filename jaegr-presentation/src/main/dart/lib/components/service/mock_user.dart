@@ -1,5 +1,5 @@
 
-import 'package:jaegr/model/UserView.dart';
+import 'package:jaegr/model/user.dart';
 
 List<User> users = [
   new User("User1", 1, false, false),
