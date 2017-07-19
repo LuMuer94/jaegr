@@ -2,8 +2,10 @@ import '../../model/group.dart';
 import '../../model/group_create_data.dart';
 import '../../model/note.dart';
 import '../../model/note_create_data.dart';
+import '../../model/note_edit_data.dart';
 import '../../model/user.dart';
 import '../../model/user_create_data.dart';
+import '../../model/user_search_data.dart';
 import 'AbstractService.dart';
 import 'dart:async';
 import 'dart:convert';
@@ -91,6 +93,14 @@ class RestService extends AbstractService {
   }
 
   @override
+  Future<Note> editNote(int id, String newTitle, String newContent) {
+    NoteEditData ned = new NoteEditData(newTitle, newContent);
+    return doRequest("/rest/notes/$id/edit", "POST", ned.toJSON(), true).then((s) {
+      return new Note.fromJson(JSON.decode(s));
+    });
+  }
+
+  @override
   Future<List<Note>> getNotesByGroup(int groupId) {
     return doRequest("/rest/notes/byGroup/$groupId", "GET", null, true).then((s) {
       return Note.fromJsonList(JSON.decode(s));
@@ -124,7 +134,7 @@ class RestService extends AbstractService {
   }
 
   @override
-  Future<dynamic> addUserToGroup(int groupId, int userId) {
+  Future<Null> addUserToGroup(int groupId, int userId) {
     return doRequest("/rest/groups/$userId/add/$userId", "POST", null, false).then((s) => null);
   }
 
@@ -132,13 +142,23 @@ class RestService extends AbstractService {
   Future<Null> removeUserToGroup(int groupId, int userId) {
     return doRequest("/rest/groups/$userId/remove/$userId", "POST", null, false).then((s) => null);
   }
-  @override
-  Future<Note> editNote(int id, String newTitle, String newContent) {
-    // TODO: implement editNote
-  }
 
   @override
-  Future<dynamic> logout() {
-    // TODO: implement logout
+  Future<Null> logout() {
+    return HttpRequest.request("$baseUrl/logout", method: "GET")
+        .then((req) {
+      if(req.status == 200) {
+        return null;
+      } else {
+        throw "Logout failed";
+      }
+    });
+  }
+  @override
+  Future<List<User>> searchUser(String likeName) {
+    UserSearchData su = new UserSearchData(likeName);
+    return doRequest("/rest/users/search", "POST", su.toJSON(), true).then((s) {
+      return User.fromJsonList(JSON.decode(s));
+    });
   }
 }

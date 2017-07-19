@@ -157,4 +157,9 @@ class MockService extends AbstractService {
       return n;
     });
   }
+  @override
+  Future<List<User>> searchUser(String likeName) {
+    List<User> result = users.where((u) => u.name.startsWith(likeName)).toList();
+    return new Future.value(result);
+  }
 }

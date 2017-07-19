@@ -7,6 +7,7 @@ abstract class AbstractService{
   Future<User> getCurrentUser();
   Future<User> getUserById(int id);
   Future<User> createUser(String username, String password);
+  Future<List<User>> searchUser(String likeName);
 
   Future<Null> login(String username, String password);
   Future<Null> logout();
