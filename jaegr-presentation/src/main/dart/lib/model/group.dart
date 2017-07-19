@@ -20,4 +20,8 @@ class Group {
     this.users = json["users"].map((u) => new User.fromJson(u));
   }
 
+  static List<Group> fromJsonList(List json) {
+    return json.map((u) => new Group.fromJson(u));
+  }
+
 }
