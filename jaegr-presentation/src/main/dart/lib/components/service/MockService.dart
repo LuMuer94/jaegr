@@ -27,42 +27,67 @@ class MockService extends AbstractService {
     new Note(users[3], "title4", "content", 1, 4, new DateTime.now()),
     new Note(users[3], "title5", "content" , 1, 5, new DateTime.now()),
   ];
-  
+
+  User curUser = null;
+
   @override
   Future<Null> addUserToGroup(int groupId, int userId) {
-    return new Future.error("Can not add user to group");
+    return getGroupById(groupId).then((g) {
+      return getUserById(userId).then((u) => g.users.add(u));
+    });
+  }
+
+  @override
+  Future<Null> removeUserToGroup(int groupId, int userId) {
+    return getGroupById(groupId).then((g) {
+      return getUserById(userId).then((u) => g.users.remove(u));
+    });
   }
 
   @override
   Future<Group> createGroup(String name) {
-    return new Future.error("Can not create group");
+    return getCurrentUser().then((u) {
+      int lastId = groups.last.id;
+      Group g = new Group(name, lastId + 1, u);
+      groups.add(g);
+      return g;
+    });
   }
 
   @override
   Future<Note> createNote(String title, String content, int groupId) {
-    return new Future.error("Can not create note");
+    return getCurrentUser().then((u) {
+      int lastId = notes.last.id;
+      Note n = new Note(
+          u, title, content, groupId, lastId + 1, new DateTime.now());
+      notes.add(n);
+      return n;
+    });
   }
 
   @override
   Future<User> createUser(String username, String password) {
-    return new Future.error("Can not create user");
+    int lastId = users.last.id;
+    User u = new User(username, lastId + 1, false, false);
+    users.add(u);
+    return new Future.value(u);
   }
 
   @override
   Future<Null> deleteNote(int id) {
-    return new Future.error("Can not delete note");
+    notes.removeWhere((n) => n.id  == id);
+    return new Future.value(null);
   }
 
   @override
   Future<User> getCurrentUser() {
-    return new Future.value(users[0]);
+    if(curUser != null) {
+      return new Future.value(curUser);
+    } else {
+      return new Future.error("Not logged in");
+    }
   }
 
-
-  @override
-  Future<Null> removeUserToGroup(int groupId, int userId) {
-    return new Future.error("Can not remove user from group");
-  }
 
   @override
   Future<Group> getGroupById(int id) {
@@ -102,17 +127,34 @@ class MockService extends AbstractService {
   Future<User> getUserById(int id) {
     try {
       return new Future.value(users.firstWhere((u) => u.id == id ));
-    } catch(ex) {
+    } catch(e) {
       return new Future.error("No user found");
     }
   }
 
   @override
   Future<Null> login(String username, String password) {
-    if(users.any((u) => u.username == username)) {
+    try {
+      User user =  users.firstWhere((u) => u.username == username );
+      curUser = user;
       return new Future.value(null);
-    } else {
+    } catch(e) {
       return new Future.error("No user not found for login");
     }
+  }
+
+  @override
+  Future<Null> logout() {
+    return getCurrentUser().then((u) {
+      curUser = null;
+    });
+  }
+  @override
+  Future<Note> editNote(int id, String newTitle, String newContent) {
+    return getNoteById(id).then((n) {
+      n.title = newTitle;
+      n.content = newContent;
+      return n;
+    });
   }
 }

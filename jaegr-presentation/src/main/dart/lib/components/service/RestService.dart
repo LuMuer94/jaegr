@@ -115,7 +115,7 @@ class RestService extends AbstractService {
   Future<Null> login(String username, String password) {
     return HttpRequest.postFormData("$baseUrl/login.jsp", { "username" : username, "password" : password })
           .then((req) {
-            if(req.status == 302) {
+            if(req.status == 200) {
               return null;
             } else {
               throw "Login failed";
@@ -131,5 +131,14 @@ class RestService extends AbstractService {
   @override
   Future<Null> removeUserToGroup(int groupId, int userId) {
     return doRequest("/rest/groups/$userId/remove/$userId", "POST", null, false).then((s) => null);
+  }
+  @override
+  Future<Note> editNote(int id, String newTitle, String newContent) {
+    // TODO: implement editNote
+  }
+
+  @override
+  Future<dynamic> logout() {
+    // TODO: implement logout
   }
 }

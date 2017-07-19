@@ -7,7 +7,9 @@ abstract class AbstractService{
   Future<User> getCurrentUser();
   Future<User> getUserById(int id);
   Future<User> createUser(String username, String password);
+
   Future<Null> login(String username, String password);
+  Future<Null> logout();
 
   Future<Group> getGroupById(int id);
   Future<List<Group>> getGroupsByUser(int id);
@@ -20,4 +22,5 @@ abstract class AbstractService{
   Future<Note> getNoteById(int id);
   Future<Note> createNote(String title, String content, int groupId);
   Future<Null> deleteNote(int id);
+  Future<Note> editNote(int id, String newTitle, String newContent);
 }
