@@ -8,6 +8,7 @@ class Note{
   int groupId;
   int id;
 
+
   Note( this.author, this.title, this.content, this.groupId, this.id, this.date);
 
 

@@ -7,12 +7,13 @@ import 'package:angular2/platform/browser.dart';
 import 'package:jaegr/app_component.dart';
 import 'package:http/http.dart';
 import 'package:http/browser_client.dart';
+import 'package:jaegr/components/service/MockService.dart';
 import 'package:jaegr/components/service/service.dart';
 import 'package:jaegr/components/services/user_service.dart';
 import 'package:jaegr/components/services/group_service.dart';
 
 
 void main() {
-  bootstrap(AppComponent);
+  bootstrap(AppComponent, [MockService]);
 }
 

@@ -20,5 +20,4 @@ abstract class AbstractService{
   Future<Note> getNoteById(int id);
   Future<Note> createNote(String title, String content, int groupId);
   Future<Null> deleteNote(int id);
-
 }

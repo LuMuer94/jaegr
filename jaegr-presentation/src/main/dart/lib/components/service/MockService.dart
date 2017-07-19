@@ -4,6 +4,9 @@ import '../../model/user.dart';
 import 'AbstractService.dart';
 import 'dart:async';
 
+import 'package:angular2/angular2.dart';
+
+@Injectable()
 class MockService extends AbstractService {
 
   static List<User> users = [
@@ -77,7 +80,7 @@ class MockService extends AbstractService {
 
   @override
   Future<List<Note>> getNotesByGroup(int groupId) {
-    return new Future.value(notes.where((n) => n.groupdId == groupId).toList());
+    return new Future.value(notes.where((n) => n.groupId == groupId).toList());
   }
 
 

@@ -1,5 +1,6 @@
-<h1>{{title}}</h1>
-<h2>Group test</h2>
+<div *ngIf="user != null">
+<h1>{{user.name}}</h1>
+<div *ngIf="groups!=null">
 <ul class="groups">
     <li *ngFor="let group of groups"
         [class.selected]="group == selectedGroup"
@@ -7,8 +8,16 @@
         <span class="badge">{{group.id}}</span> {{group.name}}
     </li>
 </ul>
-<div class="notes" *ngIf="selectedGroup != null">
+<div class="groupSelect" *ngIf="selectedGroup != null">
     <h2>
-        {{selectedGroup.name | uppercase}} is selected
+        {{selectedGroup.name | uppercase}}
     </h2>
+    <ul *ngIf="groupNotes!=null">
+        <li *ngFor="let note of groupNotes">
+            <p class="title">{{note.title}}</p>
+            <p class="content">{{note.content}}</p>
+        </li>
+    </ul>
+</div>
+</div>
 </div>

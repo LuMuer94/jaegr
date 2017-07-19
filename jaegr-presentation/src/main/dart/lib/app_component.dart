@@ -9,6 +9,7 @@ import 'package:jaegr/components/create/create_component.dart';
 import 'package:jaegr/components/login/login_component.dart';
 import 'package:angular2/router.dart';
 import 'package:jaegr/components/register/register_component.dart';
+import 'package:jaegr/components/service/MockService.dart';
 import 'package:jaegr/components/service/service.dart';
 import 'package:jaegr/components/services/group_service.dart';
 import 'package:jaegr/components/services/user_service.dart';
@@ -30,7 +31,7 @@ import 'package:jaegr/components/user/user_view_component.dart';
       <router-outlet></router-outlet>
     ''',
     directives: const [Login,ShowNewest,CreateNews,Register,UserViewComponent,ROUTER_DIRECTIVES],
-    providers: const [ROUTER_PROVIDERS,UserService,GroupService,Service])
+    providers: const [ROUTER_PROVIDERS,UserService,GroupService])
 
 @RouteConfig(const [
   const Route(path: '/login', name: 'Login', component: Login, useAsDefault: true),

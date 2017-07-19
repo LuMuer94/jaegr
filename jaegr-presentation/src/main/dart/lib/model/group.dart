@@ -12,6 +12,7 @@ class Group {
     users.add(admin);
   }
 
+
   Group.fromJson(Map json){
     this.name = json["name"];
     this.id = json["id"];
