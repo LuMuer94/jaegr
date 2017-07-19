@@ -40,10 +40,6 @@ public class DBUser extends DBIdentified {
         return friends;
     }
 
-    public boolean addFriend(DBUser friend){
-        return this.friends.add(friend);
-    }
-
     public void setFriends(Set<DBUser> friends) {
         this.friends = friends;
     }
@@ -58,13 +54,6 @@ public class DBUser extends DBIdentified {
 
     public void setNotes(Set<DBNote> notes) {
         this.notes = notes;
-    }
-
-    public boolean addNote(DBNote note){
-        if(notes == null){
-            notes = new HashSet<>();
-        }
-        return notes.add(note);
     }
 
     public String getPasswordHash() {
@@ -85,13 +74,6 @@ public class DBUser extends DBIdentified {
 
     public void setGroups(Set<DBGroup> groups) {
         this.groups = groups;
-    }
-
-    public boolean addGroup(DBGroup group){
-        if (groups == null) {
-            groups = new HashSet<>();
-        }
-        return this.groups.add(group);
     }
 
     public boolean isDisabled() {
