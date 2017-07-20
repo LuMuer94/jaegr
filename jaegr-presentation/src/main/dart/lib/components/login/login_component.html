@@ -1,6 +1,6 @@
-<div *ngIf="loggedIn !=null">
+<div *ngIf="isLoggedIn() !=null">
     <h3>Login</h3>
-    <form *ngIf="!loggedIn">
+    <form *ngIf="!isLoggedIn()">
         <dl>
             <dt>
                 <label for="username">Username</label>
@@ -18,8 +18,8 @@
         <button type="submit" (click)="login($event)">Login</button>
     </form>
 
-    <div *ngIf="loggedIn">
-        <p>You are logged in as {{user.name}}</p>
-    <button *ngIf="loggedIn" type="submit" (click)="logout($event)">Logout</button>
+    <div *ngIf="isLoggedIn()">
+    <p *ngIf="user!=null">You are logged in as {{user.name}}</p>
+    <button type="submit" (click)="logout($event)">Logout</button>
     </div>
 </div>
