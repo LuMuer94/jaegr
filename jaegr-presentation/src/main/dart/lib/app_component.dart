@@ -4,6 +4,7 @@
 import 'dart:async';
 import 'dart:html';
 import 'package:angular2/core.dart';
+import 'package:jaegr/components/group/create_group_component.dart';
 import 'package:jaegr/components/newest/newest_component.dart';
 import 'package:jaegr/components/create/create_component.dart';
 import 'package:jaegr/components/login/login_component.dart';
@@ -33,7 +34,8 @@ import 'package:jaegr/model/util.dart';
       </nav>
       <router-outlet></router-outlet>
     ''',
-    directives: const [Login,ShowNewest,CreateNews,Register,UserViewComponent,ROUTER_DIRECTIVES],
+    styleUrls: const ['app_component.css'],
+    directives: const [Login,ShowNewest,CreateNews,Register,UserViewComponent,CreateGroup,ROUTER_DIRECTIVES],
     providers: const [ROUTER_PROVIDERS,UserService,GroupService])
 
 @RouteConfig(const [
@@ -60,6 +62,7 @@ class AppComponent implements OnInit{
 
   @override
   Future ngOnInit() async{
+    context.creatingGroup = false;
     if( await Util.isloggedIn( restService ) ){
       context.loggedIn=true;
       _router.navigate(['UserView']);

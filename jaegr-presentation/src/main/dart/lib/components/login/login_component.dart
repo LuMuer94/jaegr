@@ -31,7 +31,7 @@ class Login implements OnInit {
     await restService.login(username, password);
     if( context.loggedIn = await Util.isloggedIn(restService) ){
       user= await restService.getCurrentUser();
-      print( "login succesfull");
+      print( "login successful");
       _router.navigate(['UserView']);
     }
     else{
@@ -46,7 +46,7 @@ class Login implements OnInit {
       print( "logout failed");
     }
     else{
-      print("logout successfull");
+      print("logout successful");
     }
   }
 

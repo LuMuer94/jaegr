@@ -6,13 +6,19 @@
                 <label for="username">Username</label>
             </dt>
             <dd>
-                <input [(ngModel)]="model.name" id="username" type="text" required>
+                <input [(ngModel)]="username" id="username" type="text" required>
             </dd>
             <dt>
                 <label for="password">Password</label>
             </dt>
             <dd>
-                <input [(ngModel)]="model.password" id="password" type="text" required>
+                <input [(ngModel)]="password" id="password" type="password" required>
+            </dd>
+            <dt>
+                <label for="checkPassword">Re-enter password</label>
+            </dt>
+            <dd>
+                <input [(ngModel)]="checkPassword" id="checkPassword" type="password" required>
             </dd>
         </dl>
         <button type="submit" (click)="registerUser($event)">Register</button>

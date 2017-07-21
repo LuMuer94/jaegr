@@ -1,5 +1,7 @@
+import 'dart:async';
 import 'package:angular2/angular2.dart';
 import 'dart:html';
+import 'package:jaegr/components/service/MockService.dart';
 import 'package:jaegr/model/user.dart';
 import 'package:jaegr/model/user_create_data.dart';
 
@@ -10,18 +12,41 @@ import 'package:jaegr/model/user_create_data.dart';
 
 class Register{
 
-  UserCreateData model;
+  String username;
+  String password;
+  String checkPassword;
 
-  CreateUser(){
-    model = new UserCreateData("","");
+  final MockService restService;
+
+  Register( this.restService );
+
+  void clearInputs()
+  {
+    username="";
+    password="";
+    checkPassword="";
   }
 
-  void registerUser(dynamic e){
+  bool inputsAreValid(){
+    return username!=null && password!=null && checkPassword!=null &&
+    username.compareTo("")!=0 && password.compareTo("")!=0 && password.compareTo(checkPassword)==0;
+  }
+
+  Future registerUser(dynamic e) async {
     e.preventDefault();
-    var requestHeaders = {
-      'Content-Type':'application/json',
-      'Accept':'application/json'
-    };
-    HttpRequest.request("../rest/create",method: "POST",sendData: model.toJSON(),requestHeaders: requestHeaders).catchError((n)=>print(n));
+    if( inputsAreValid() ){
+      try {
+        await restService.createUser(username, password);
+        window.alert("Registration successful!\nYou should now be able to login with\nyour username and password");
+        clearInputs();
+      }
+      catch( e ){
+        window.alert("Registration failed!\nUsername might already be in use");
+      }
+    }
+    else{
+      window.alert( "Please enter a username and a password and\nre-enter your password correctly for checking!");
+      checkPassword="";
+    }
   }
 }

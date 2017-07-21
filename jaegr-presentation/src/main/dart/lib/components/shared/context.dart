@@ -6,4 +6,5 @@ import 'package:jaegr/model/user.dart';
 @Injectable()
 class Context{
   bool loggedIn;
+  bool creatingGroup;
 }
