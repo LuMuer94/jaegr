@@ -12,9 +12,10 @@ import 'package:jaegr/components/service/RestService.dart';
 import 'package:jaegr/components/service/service.dart';
 import 'package:jaegr/components/services/user_service.dart';
 import 'package:jaegr/components/services/group_service.dart';
+import 'package:jaegr/components/shared/context.dart';
 
 
 void main() {
-  bootstrap(AppComponent, [MockService,RestService]);
+  bootstrap(AppComponent, [MockService,RestService,Context]);
 }
 

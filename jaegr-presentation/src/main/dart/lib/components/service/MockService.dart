@@ -134,13 +134,15 @@ class MockService extends AbstractService {
 
   @override
   Future<Null> login(String username, String password) {
-    try {
-      User user =  users.firstWhere((u) => u.username == username );
+    try{
+      User user =  users.firstWhere((u) => u.name == username );
       curUser = user;
       return new Future.value(null);
     } catch(e) {
       return new Future.error("No user not found for login");
     }
+
+
   }
 
   @override
