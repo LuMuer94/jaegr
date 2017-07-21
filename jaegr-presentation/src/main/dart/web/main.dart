@@ -13,6 +13,7 @@ import 'package:jaegr/components/service/service.dart';
 import 'package:jaegr/components/services/user_service.dart';
 import 'package:jaegr/components/services/group_service.dart';
 import 'package:jaegr/components/shared/context.dart';
+import 'package:jaegr/components/service/AbstractService.dart';
 
 
 void main() {

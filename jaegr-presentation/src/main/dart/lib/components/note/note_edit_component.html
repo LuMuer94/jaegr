@@ -1,10 +1,10 @@
-<!DOCTYPE html>
-<html lang="en">
-<head>
-    <meta charset="UTF-8">
-    <title>Title</title>
-</head>
-<body>
-
-</body>
-</html>
+<div>
+    <ul>
+        <li><label>ID:</label> {{note2Edit.id}}</li>
+        <li><label>Titel:</label> <input [(ngModel)]="note2Edit.title" placeholder="Titel"></li>
+        <li><label>Inhalt:</label> <input [(ngModel)]="note2Edit.content" placeholder="Inhalt"></li>
+        <li><label>Datum:</label> <br><span>{{note2Edit.date}}</span></li>
+    </ul>
+    <button class="buttonNoteEdit" (click)="submit()">Bestätigen</button>
+    <button class="buttonNoteEdit" (click)="delete()">Löschen</button>
+</div>

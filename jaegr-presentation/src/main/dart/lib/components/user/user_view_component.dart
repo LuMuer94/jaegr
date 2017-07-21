@@ -2,6 +2,8 @@ import 'dart:async';
 import 'package:angular2/angular2.dart';
 import 'package:angular2/router.dart';
 import 'package:jaegr/components/group/create_group_component.dart';
+import 'package:jaegr/components/note/note_component.dart';
+import 'package:jaegr/components/note/note_edit_component.dart';
 import 'package:jaegr/components/service/AbstractService.dart';
 import 'package:jaegr/components/service/MockService.dart';
 import 'package:jaegr/components/service/service.dart';
@@ -15,7 +17,9 @@ import 'package:jaegr/model/user.dart';
   selector: 'my-view',
   directives: const [CreateGroup],
   templateUrl: 'user_view_component.html',
-  styleUrls: const ['user_view_component.css']
+  styleUrls: const ['user_view_component.css'],
+  directives: const [NoteComponent, NoteEdit],
+  providers: const [AbstractService]
 )
 
 //TODO: replace mock services
@@ -29,6 +33,7 @@ class UserViewComponent implements OnInit{
   Group selectedGroup;
 
   List<Note> groupNotes;
+  Note selectedNote;
   User user;
 
   UserViewComponent(
@@ -67,5 +72,13 @@ class UserViewComponent implements OnInit{
 
   void startCreatingGroup(){
     context.creatingGroup=true;
+  }
+
+  Future<Null> selectNote(Note note) async{
+    print(note!= null ? "Es lebt!" : "null -.-");
+    if(this.selectedNote != note)
+      this.selectedNote = note;
+    else
+      selectedNote = null;
   }
 }
