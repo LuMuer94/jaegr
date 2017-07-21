@@ -89,6 +89,7 @@ public class StartupBean {
         noteJson.setTitle("Json helper erweitern");
         noteJson.setContent("jo");
         noteJson.setUser(admin);
+        noteJson.setGroup(group1);
 		entityManager.persist(noteJson);
 	}
 
