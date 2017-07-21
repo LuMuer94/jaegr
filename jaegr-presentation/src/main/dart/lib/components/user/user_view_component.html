@@ -14,9 +14,13 @@
     </h2>
     <ul class="notes" *ngIf="groupNotes!=null">
         <li *ngFor="let note of groupNotes">
-            <note [note]="note"></note>
+            <note [note]="note" (click)="selectNote(note)"></note>
         </li>
     </ul>
+
 </div>
+    <div class="noteEdit" *ngIf="selectedNote!= null">
+        <note-edit [note2Edit]="selectedNote"></note-edit>
+    </div>
 </div>
 </div>

@@ -10,12 +10,5 @@ import 'package:jaegr/model/note.dart';
 class NoteComponent{
   @Input()
   Note note;
-  final Router _router;
 
-  NoteComponent(this._router);
-
-  Future<Null> edit() => _router.navigate([
-    'NoteEdit',
-      {}
-  ]);
 }
