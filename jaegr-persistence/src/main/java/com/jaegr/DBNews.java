@@ -9,7 +9,6 @@ import java.util.Date;
 @Entity
 @XmlRootElement
 public class DBNews extends DBIdentified {
-
 	private Date publishedOn;
 	private String headline;
 	private String content;

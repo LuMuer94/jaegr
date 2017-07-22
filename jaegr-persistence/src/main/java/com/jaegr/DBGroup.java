@@ -1,14 +1,10 @@
 package com.jaegr;
 
-import javax.persistence.Entity;
-import javax.persistence.ManyToMany;
-import javax.persistence.OneToMany;
+import javax.persistence.*;
 import javax.xml.bind.annotation.XmlRootElement;
 import java.util.HashSet;
 import java.util.Set;
 
-
-//ToDo: 1 admin
 /**
  * Created by jonas on 30.06.17.
  */
@@ -18,7 +14,7 @@ public class DBGroup extends DBIdentified {
     private Set<DBNote> notes;
     private Set<DBUser> users;
     private String name;
-    private Set<DBUser> admins;
+    private DBUser owner;
 
     @OneToMany(mappedBy = "group")
     public Set<DBNote> getNotes() {
@@ -31,21 +27,11 @@ public class DBGroup extends DBIdentified {
 
     @ManyToMany
     public Set<DBUser> getUsers() {
-        if (users == null) {
-            users = new HashSet<DBUser>();
-        }
         return users;
     }
 
     public void setUsers(Set<DBUser> users) {
         this.users = users;
-    }
-
-    public boolean addUser(DBUser user){
-        if (users == null) {
-            users = new HashSet<DBUser>();
-        }
-        return this.users.add(user);
     }
 
     public String getName() {
@@ -56,26 +42,12 @@ public class DBGroup extends DBIdentified {
         this.name = name;
     }
 
-    @OneToMany
-    public Set<DBUser> getAdmins() {
-        if (admins == null) {
-            admins = new HashSet<DBUser>();
-        }
-        return admins;
+    @ManyToOne(optional = false)
+    public DBUser getOwner() {
+        return owner;
     }
 
-    public void setAdmins(Set<DBUser> admins) {
-        this.admins = admins;
-    }
-
-    public boolean addAdmin(DBUser user){
-        if (admins == null) {
-            admins = new HashSet<DBUser>();
-        }
-        return this.admins.add(user);
-    }
-
-    public boolean removeUser(DBUser user){
-        return this.users.remove(user);
+    public void setOwner(DBUser owner) {
+        this.owner = owner;
     }
 }

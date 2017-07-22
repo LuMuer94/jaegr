@@ -37,6 +37,14 @@
 			</plugins>
 		</pluginManagement>
 		<plugins>
+			<plugin>
+				<groupId>org.wildfly.swarm</groupId>
+				<artifactId>wildfly-swarm-plugin</artifactId>
+				<version>${wildfly-swarm.version}</version>
+				<configuration>
+					<fractions>jpa,cdi,ejb,jaxrs</fractions>
+				</configuration>
+			</plugin>
 
 			<plugin>
 				<groupId>com.github.dzwicker.dart</groupId>
@@ -46,7 +54,7 @@
 					<checkedMode>true</checkedMode>
 					<testFailureIgnore>false</testFailureIgnore>
 					<sourceDirectory>src/main/dart</sourceDirectory>
-					<dartSdk>${dart-sdk.path}</dartSdk>
+					<dartSdk>${env.DART_SDK}</dartSdk>
 				</configuration>
 				<executions>
 					<execution>
@@ -104,4 +112,3 @@
 	</dependencies>
 
 </project>
-

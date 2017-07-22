@@ -13,15 +13,12 @@ import java.util.Set;
 @XmlRootElement
 public class DBNote extends DBIdentified{
     private DBUser user;
-
     private String title;
     private String content;
-
     private Date date;
-
     private DBGroup group;
 
-    @ManyToOne
+    @ManyToOne(optional = false)
     public DBUser getUser() {
         return user;
     }
@@ -47,7 +44,7 @@ public class DBNote extends DBIdentified{
         this.date = date;
     }
 
-    @ManyToOne
+    @ManyToOne(optional = false)
     public DBGroup getGroup() {
         return group;
     }

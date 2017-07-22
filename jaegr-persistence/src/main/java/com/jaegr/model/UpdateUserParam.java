@@ -7,6 +7,10 @@ public class UpdateUserParam {
     private String newName;
     private String newPassword;
 
+    public UpdateUserParam() {
+
+    }
+
     public String getNewName() {
         return newName;
     }

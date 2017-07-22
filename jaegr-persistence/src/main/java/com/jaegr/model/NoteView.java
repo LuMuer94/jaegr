@@ -10,11 +10,12 @@ import java.util.Set;
  * Created by jonas on 30.06.17.
  */
 public class NoteView {
-    private String userName;
-    private long userId;
+    private UserView owner;
 
     private String groupName;
     private long groupId;
+
+    private long id;
 
     private Date date;
 
@@ -22,30 +23,19 @@ public class NoteView {
     private String content;
 
     public NoteView(DBNote note) {
-        this.userName = note.getUser().getName();
-        this.userId = note.getUser().getId();
+        this.owner = new UserView(note.getUser());
+
         this.groupName = note.getGroup().getName();
         this.groupId = note.getGroup().getId();
+
+        this.id = note.getId();
         this.date = note.getDate();
         this.title = note.getTitle();
         this.content = note.getContent();
     }
 
-
-    public String getUserName() {
-        return userName;
-    }
-
-    public long getUserId() {
-        return userId;
-    }
-
-    public String getGroupName() {
-        return groupName;
-    }
-
-    public long getGroupId() {
-        return groupId;
+    public long getId() {
+        return id;
     }
 
     public Date getDate() {
@@ -58,6 +48,18 @@ public class NoteView {
 
     public String getContent() {
         return content;
+    }
+
+    public UserView getOwner() {
+        return owner;
+    }
+
+    public String getGroupName() {
+        return groupName;
+    }
+
+    public long getGroupId() {
+        return groupId;
     }
 
     /*

@@ -1,8 +1,12 @@
 package com.jaegr;
 
+import com.jaegr.auth.permission.IsGroupMemberPermission;
+import com.jaegr.auth.permission.IsOwnerPermission;
 import com.jaegr.daos.GroupDAO;
 import com.jaegr.daos.UserDAO;
+import com.jaegr.model.CreateGroupParam;
 import com.jaegr.model.GroupView;
+import org.apache.shiro.authz.annotation.RequiresUser;
 
 import javax.persistence.EntityManager;
 import javax.persistence.PersistenceContext;
@@ -13,10 +17,7 @@ import javax.ws.rs.core.Response;
 import java.util.Set;
 import java.util.stream.Collectors;
 
-/**
- * Created by jonas on 30.06.17.
- */
-@Path("/friends")
+@Path("/groups")
 @Transactional
 public class GroupCRUD {
     @PersistenceContext
@@ -25,106 +26,98 @@ public class GroupCRUD {
     @Path("/{id}")
     @GET
     @Produces(MediaType.APPLICATION_JSON)
-    public Response get(@PathParam("id") final long id) {
+    @RequiresUser
+    public GroupView get(@PathParam("id") final long id) {
         GroupDAO dao = new GroupDAO(entityManager);
 
-        //ToDo: exception group not found
+        UserDAO userDao = new UserDAO(entityManager);
+        DBUser user = userDao.get(CRUDUtils.getCurrentUserId());
+
+        boolean isMember = dao.checkIsMember(id, user);
+        CRUDUtils.checkPermission(new IsGroupMemberPermission(isMember));
+
+        return new GroupView(dao.get(id));
+    }
+
+    @Path("/byUser/{userId}")
+    @GET
+    @Produces(MediaType.APPLICATION_JSON)
+    @RequiresUser
+    public Set<GroupView> getGroupsByUser(@PathParam("userId") final long userId) {
+        UserDAO userDao = new UserDAO(entityManager);
+
+        CRUDUtils.checkPermission(new IsOwnerPermission(userId));
+        return userDao.get(userId).getGroups().stream()
+                .map(GroupView::new)
+                .collect(Collectors.toSet());
+    }
+
+    @Path("/create")
+    @POST
+    @Consumes(MediaType.APPLICATION_JSON)
+    @Produces(MediaType.APPLICATION_JSON)
+    @RequiresUser
+    public GroupView createGroup(final CreateGroupParam createGroupParam){
+        UserDAO userDao = new UserDAO(entityManager);
+        DBUser user = userDao.get(CRUDUtils.getCurrentUserId());
+
+        GroupDAO dao = new GroupDAO(entityManager);
+        DBGroup newGroup = dao.create(user, createGroupParam.getName());
+
+        return new GroupView(newGroup);
+    }
+
+    @Path("/{id}/add/{userId}")
+    @POST
+    @Consumes(MediaType.APPLICATION_JSON)
+    @RequiresUser
+    public Response addUser(@PathParam("id") final long id, @PathParam("userId") final long userId){
+        GroupDAO dao = new GroupDAO(entityManager);
         DBGroup group = dao.get(id);
-        return Response.ok(new GroupView(group)).build();
+
+        CRUDUtils.checkPermission(new IsOwnerPermission(group.getOwner()));
+
+        UserDAO userDao = new UserDAO(entityManager);
+        DBUser userToAdd = userDao.get(userId);
+        group.getUsers().add(userToAdd);
+
+        return Response.ok().build();
+    }
+
+    @Path("/{id}/remove/{userId}")
+    @POST
+    @Consumes(MediaType.APPLICATION_JSON)
+    @RequiresUser
+    public Response removeUser(@PathParam("id") final long id, @PathParam("userId") final long userId){
+        GroupDAO dao = new GroupDAO(entityManager);
+        DBGroup group = dao.get(id);
+
+        CRUDUtils.checkPermission(new IsOwnerPermission(group.getOwner()));
+
+        //Owner can not be deleted
+        if(group.getOwner().getId() == userId) {
+            throw new NotAcceptableException();//ToDo: proper exception
+        }
+
+        UserDAO userDao = new UserDAO(entityManager);
+        DBUser userToRemove = userDao.get(userId);
+        group.getUsers().remove(userToRemove);
+
+        return Response.ok().build();
     }
 
     @Path("/{id}")
-    @GET
-    @Produces(MediaType.APPLICATION_JSON)
-    public Response getGroups(@PathParam("id") final long id) {
-        UserDAO dao = new UserDAO(entityManager);
-        Set<GroupView> groups = dao.getGroups(id).stream()
-                .map(u -> new GroupView(u))
-                .collect(Collectors.toSet());
-
-        return Response.ok(groups).build();
-    }
-
-    @POST
-    @Consumes(MediaType.APPLICATION_JSON)
-    @Produces(MediaType.APPLICATION_JSON)
-    public Response createGroup(final long creatorId, DBGroup group){
-        GroupDAO dao = new GroupDAO(entityManager);
-
-        DBGroup newGroup = dao.create(creatorId, group);
-
-        return Response.ok(new GroupView(newGroup)).build();
-    }
-
-    @POST
-    @Path("/add")
-    @Consumes(MediaType.APPLICATION_JSON)
-    @Produces(MediaType.APPLICATION_JSON)
-    public Response addUser(final long userId, final long friendId, final long groupId){
-        GroupDAO dao = new GroupDAO(entityManager);
-
-        DBGroup group = dao.addUser(userId, friendId, groupId);
-
-        return Response.ok(new GroupView(group)).build();
-    }
-
-    @POST
-    @Path("/remove")
-    @Consumes(MediaType.APPLICATION_JSON)
-    @Produces(MediaType.APPLICATION_JSON)
-    public Response removeUser(final long userId, final long friendId, final long groupId){
-        GroupDAO dao = new GroupDAO(entityManager);
-
-        DBGroup group = dao.removeUser(userId, friendId, groupId);
-
-        return Response.ok(new GroupView(group)).build();
-    }
-
-    @POST
-    @Path("/add")
-    @Consumes(MediaType.APPLICATION_JSON)
-    @Produces(MediaType.APPLICATION_JSON)
-    public Response addAdmin(final long userId, final long newAdminId, final long groupId){
-        GroupDAO dao = new GroupDAO(entityManager);
-
-        DBGroup group = dao.addAdmin(userId, newAdminId, groupId);
-
-        return Response.ok(new GroupView(group)).build();
-    }
-
-    @POST
-    @Path("/remove")
-    @Consumes(MediaType.APPLICATION_JSON)
-    @Produces(MediaType.APPLICATION_JSON)
-    public Response removeAdmin(final long userId, final long friendId, final long groupId){
-        GroupDAO dao = new GroupDAO(entityManager);
-
-        DBGroup group = dao.removeAdmin(userId, friendId, groupId);
-
-        return Response.ok(new GroupView(group)).build();
-    }
-
     @DELETE
     @Consumes(MediaType.APPLICATION_JSON)
-    @Produces(MediaType.APPLICATION_JSON)
-    public Response deleteGroup(final long userId, final long groupId){
+    @RequiresUser
+    public Response deleteGroup(@PathParam("id") final long id){
         GroupDAO dao = new GroupDAO(entityManager);
+        DBGroup group = dao.get(id);
 
-        DBGroup group = dao.delete(userId, groupId);
+        CRUDUtils.checkPermission(new IsOwnerPermission(group.getOwner()));
 
-        return Response.ok(new GroupView(group)).build();
+        dao.delete(id);
+
+        return Response.ok().build();
     }
-
-
-
-
-    //ToDo:
-    // get -> GroupView
-    // getGroups -> Set<GroupView>
-    // create
-    // addUser Permissions(!)
-    // removeUser
-    // addAdmin
-    // removeAdmin
-    // delete
 }

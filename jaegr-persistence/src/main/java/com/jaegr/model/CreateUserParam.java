@@ -1,5 +1,7 @@
 package com.jaegr.model;
 
+import org.h2.command.ddl.CreateUser;
+
 import javax.xml.bind.annotation.XmlRootElement;
 
 /**
@@ -9,6 +11,14 @@ import javax.xml.bind.annotation.XmlRootElement;
 public class CreateUserParam {
     private String name;
     private String password;
+
+    public CreateUserParam() {
+    }
+
+    public CreateUserParam(String name, String password) {
+        this.name = name;
+        this.password = password;
+    }
 
     public String getName() {
         return name;

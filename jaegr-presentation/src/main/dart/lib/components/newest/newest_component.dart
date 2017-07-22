@@ -1,19 +1,13 @@
-
-
+import '../../model/news.dart';
 import 'package:angular2/angular2.dart';
 import 'dart:convert';
 import 'dart:html';
 import 'package:jaegr/model/news.dart';
 
 @Component(selector: 'show-newest', templateUrl: 'newest_component.html')
-class ShowNewest implements OnInit {
+class ShowNewest {
 
   News loaded;
-
-  @override
-  ngOnInit() {
-    fetchNewest();
-  }
 
   void loadNewest(dynamic e){
     e.preventDefault();
