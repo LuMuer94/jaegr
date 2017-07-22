@@ -1,0 +1,27 @@
+<div class="memberView" *ngIf="members != null && members.contains(user)">
+    <div class="memberViewHeader">
+        <div class="main">
+            <h2>
+                Members of {{group.name}}:
+            </h2>
+        </div>
+    </div>
+    <button id="back" (click)="goBack()">Back</button>
+    <div *ngIf="user==group.admin && !isAddingUser()" class="addUser" (click)="startAddingUser()">
+        <span class="badge"><span class="symbol">+</span></span><span class="text">addUser</span>
+    </div>
+    <div *ngIf="isAddingUser()">
+        <user-search (newUser)="addGroup($event)"></user-search>
+    </div>
+    <div class="clear"></div>
+    <div class="members">
+        <ul>
+            <li *ngFor="let user of members">
+                <span class="badge">{{user.id}}</span>
+                <span>{{user.name}}</span>
+                <button class="delete"
+                        (click)="delete(user); $event.stopPropagation()">x</button>
+            </li>
+        </ul>
+    </div>
+</div>
