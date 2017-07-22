@@ -37,6 +37,14 @@
 			</plugins>
 		</pluginManagement>
 		<plugins>
+			<plugin>
+				<groupId>org.wildfly.swarm</groupId>
+				<artifactId>wildfly-swarm-plugin</artifactId>
+				<version>${wildfly-swarm.version}</version>
+				<configuration>
+					<fractions>jpa,cdi,ejb,jaxrs</fractions>
+				</configuration>
+			</plugin>
 
 			<plugin>
 				<groupId>com.github.dzwicker.dart</groupId>

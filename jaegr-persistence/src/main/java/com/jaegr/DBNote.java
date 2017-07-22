@@ -18,7 +18,7 @@ public class DBNote extends DBIdentified{
     private Date date;
     private DBGroup group;
 
-    @ManyToOne
+    @ManyToOne(optional = false)
     public DBUser getUser() {
         return user;
     }
@@ -44,7 +44,7 @@ public class DBNote extends DBIdentified{
         this.date = date;
     }
 
-    @ManyToOne
+    @ManyToOne(optional = false)
     public DBGroup getGroup() {
         return group;
     }

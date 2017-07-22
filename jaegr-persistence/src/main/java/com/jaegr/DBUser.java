@@ -12,7 +12,6 @@ import java.util.Set;
 @Entity
 @XmlRootElement
 public class DBUser extends DBIdentified {
-    @Column(unique=true)
     private String name;
 
     private String passwordHash;
@@ -24,6 +23,7 @@ public class DBUser extends DBIdentified {
     private boolean disabled;
     private boolean isAdmin;
 
+    @Column(unique=true)
     public String getName() {
         return name;
     }

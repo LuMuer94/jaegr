@@ -42,7 +42,7 @@ public class DBGroup extends DBIdentified {
         this.name = name;
     }
 
-    @ManyToOne
+    @ManyToOne(optional = false)
     public DBUser getOwner() {
         return owner;
     }
