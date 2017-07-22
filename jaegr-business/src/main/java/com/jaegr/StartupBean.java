@@ -70,6 +70,12 @@ public class StartupBean {
 	    UserDAO userDao = new UserDAO(entityManager);
         GroupDAO groupDao = new GroupDAO(entityManager);
 
+        DBUser alreadyExistingAdmin = userDao.getByName("admin");
+        //Skip if there is already an admin
+        if(alreadyExistingAdmin == null) {
+            return;
+        }
+
 		//Creating users
         DBUser admin = userDao.create(new CreateUserParam("admin", "123"), true);
         DBUser user1 = userDao.create(new CreateUserParam("user1", "abc"), false);
