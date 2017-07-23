@@ -6,7 +6,6 @@ import 'package:jaegr/components/group/group_view_component.dart';
 import 'package:jaegr/components/note/note_edit_component.dart';
 import 'package:jaegr/components/service/AbstractService.dart';
 import 'package:jaegr/components/service/MockService.dart';
-import 'package:jaegr/components/service/service.dart';
 import 'package:jaegr/components/shared/context.dart';
 import 'package:jaegr/model/group.dart';
 import 'package:jaegr/model/note.dart';

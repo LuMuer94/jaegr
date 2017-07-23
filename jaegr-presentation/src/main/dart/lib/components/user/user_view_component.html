@@ -9,14 +9,14 @@
 <div *ngIf="groups!=null">
 <ul class="groups">
     <li *ngFor="let group of groups"
-        [class.selected]="group == selectedGroup"
+        [class.selected]="group == selectedGroup()"
         (click)="onSelect(group)">
         <span class="badge">{{group.id}}</span><span class="groupName">{{group.name}}</span>
     </li>
 </ul>
     <!-- Group view -->
 <div *ngIf="selectedGroup()!=null && selectedGroup().users.contains(user)" class="selectedGroup">
-    <group-view [group]="selectedGroup()" [user]="user">  </group-view>
+    <group-view [group]="selectedGroup()" [user]="user" [groupNotes]="groupNotes">  </group-view>
 </div>
 </div>
 </div>

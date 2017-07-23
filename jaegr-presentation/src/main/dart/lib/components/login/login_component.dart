@@ -5,8 +5,8 @@ import 'package:angular2/router.dart';
 import 'package:jaegr/components/service/MockService.dart';
 import 'package:jaegr/components/service/RestService.dart';
 import 'package:jaegr/components/shared/context.dart';
+import 'package:jaegr/components/util/util.dart';
 import 'package:jaegr/model/user.dart';
-import 'package:jaegr/model/util.dart';
 
 @Component(selector: 'login', templateUrl: 'login_component.html')
 
@@ -29,7 +29,7 @@ class Login implements OnInit {
   Future login(dynamic e) async {
     e.preventDefault();
     await restService.login(username, password);
-    if( context.loggedIn = await Util.isloggedIn(restService) ){
+    if( context.loggedIn = await Util.isLoggedIn(restService) ){
       user= await restService.getCurrentUser();
       print( "login successful");
       _router.navigate(['UserView']);
@@ -42,7 +42,7 @@ class Login implements OnInit {
   Future logout(dynamic e) async{
     e.preventDefault();
     await restService.logout();
-    if( context.loggedIn = await Util.isloggedIn(restService) ){
+    if( context.loggedIn = await Util.isLoggedIn(restService) ){
       print( "logout failed");
     }
     else{

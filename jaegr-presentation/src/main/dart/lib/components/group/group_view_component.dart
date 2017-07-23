@@ -23,6 +23,7 @@ class GroupView implements OnInit {
   @Input()
   User user;
 
+  @Input()
   List<Note> groupNotes;
 
   final MockService restService;
@@ -56,6 +57,10 @@ class GroupView implements OnInit {
       'LeaveGroup',
       {'id': group.id.toString()}
     ]);
+  }
+
+  Future getGroupNotes() async{
+    return await restService.getNotesByGroup(group.id);
   }
 
 
