@@ -71,10 +71,10 @@
 .groupViewHeader .main .leaveGroup{
     position: relative;
     top: -198px;
-    left: 989px;
+    left: 973px;
     cursor: pointer;
     background-color: #EEE;
-    width: 8em;
+    width: 9em;
     height: 2em;
     border-radius: 0px 3px 0px 4px;
 }
@@ -90,7 +90,7 @@
     height: 2em;
     width: 2em;
     position: relative;
-    left: -13px;
+    left: -11px;
     border-radius: 0px 0px 0px 4px;
 }
 .groupViewHeader .main .leaveGroup .badge .symbol {
@@ -104,7 +104,6 @@
     font-size: 1.1em;
     position: relative;
     top: -72px;
-    right: 8px;
 }
 
 /* add note */
