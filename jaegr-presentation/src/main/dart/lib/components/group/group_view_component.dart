@@ -31,17 +31,18 @@ class GroupView implements OnInit{
 
   GroupView( this.restService, this._router, this.context);
 
-
   void startAddingUser(){
-
+    if( user==group.admin ){
+      context.addingUser=true;
+      viewUsers();
+    }
   }
 
   void startAddingNote(){
-
   }
 
-  void viewUsers(){
-
+  Future viewUsers() async{
+    _router.navigate(['MemberView', {'id': group.id.toString()}]);
   }
 
 

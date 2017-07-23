@@ -18,7 +18,6 @@ import 'package:prompt/prompt.dart';
 class UserSearch implements OnInit {
   MockService restService;
   Router _router;
-  Stream<List<User>> users;
 
   @Input()
   Group group;
@@ -27,28 +26,33 @@ class UserSearch implements OnInit {
   Stream<User> get newUser => _user.stream;
   final _user = new StreamController<User>();
 
+  Stream<List<User>> users;
+
   StreamController<String> _searchTerms =
   new StreamController<String>.broadcast();
 
   UserSearch(this.restService, this._router);
   // Push a search term into the stream.
   void search(String term) => _searchTerms.add(term);
+
   Future<Null> ngOnInit() async {
     users = _searchTerms.stream
         .transform(debounce(new Duration(milliseconds: 300)))
         .distinct()
         .transform(switchMap((term) => term.isEmpty
         ? new Stream<List<User>>.fromIterable([<User>[]])
-        : restService.search(term).asStream()))
+        : restService.searchUser(term).asStream()))
         .handleError((e) {
       print(e); // for demo purposes only
     });
   }
-  Future addPrompt(User user) async{
-    var ok = askSync(new Question.confirm("Do you want to add " + user.name + " to group " + group.name + "?"));
-    window.alert(ok.toString());
-    if( ok ){
-      _user.add( user );
-    }
+  Future addUser(User user) async{
+      if( !group.users.contains(user) ){
+        _user.add( user );
+      }
+      else{
+        window.alert( "User " + user.name + " is already a member of the group!");
+      }
   }
+
 }

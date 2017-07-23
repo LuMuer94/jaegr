@@ -6,6 +6,7 @@ import 'dart:html';
 import 'package:angular2/core.dart';
 import 'package:jaegr/components/group/create_group_component.dart';
 import 'package:jaegr/components/group/group_view_component.dart';
+import 'package:jaegr/components/group/member_view_component.dart';
 import 'package:jaegr/components/newest/newest_component.dart';
 import 'package:jaegr/components/create/create_component.dart';
 import 'package:jaegr/components/login/login_component.dart';
@@ -18,6 +19,7 @@ import 'package:jaegr/components/service/service.dart';
 import 'package:jaegr/components/services/group_service.dart';
 import 'package:jaegr/components/services/user_service.dart';
 import 'package:jaegr/components/shared/context.dart';
+import 'package:jaegr/components/user/user_search_component.dart';
 import 'package:jaegr/model/group.dart';
 import 'package:jaegr/model/user.dart';
 import 'package:jaegr/components/user/user_view_component.dart';
@@ -37,7 +39,7 @@ import 'package:jaegr/model/util.dart';
       <router-outlet></router-outlet>
     ''',
     styleUrls: const ['app_component.css'],
-    directives: const [Login,ShowNewest,CreateNews,Register,UserViewComponent,CreateGroup,GroupView,NoteView,ROUTER_DIRECTIVES],
+    directives: const [Login,ShowNewest,CreateNews,Register,UserViewComponent,CreateGroup,GroupView,NoteView,MemberView,UserSearch,ROUTER_DIRECTIVES],
     providers: const [ROUTER_PROVIDERS,UserService,GroupService])
 
 @RouteConfig(const [
@@ -45,7 +47,8 @@ import 'package:jaegr/model/util.dart';
   const Route(path: '/createNews', name: 'CreateNews', component: CreateNews),
   const Route(path: '/news', name: 'ShowNewest', component: ShowNewest),
   const Route(path: '/register', name: 'Register', component: Register),
-  const Route(path: '/userView', name:'UserView', component: UserViewComponent)
+  const Route(path: '/userView', name:'UserView', component: UserViewComponent),
+  const Route(path: '/memberView/:id', name: 'MemberView', component: MemberView)
 ])
 
 class AppComponent implements OnInit{
