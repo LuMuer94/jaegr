@@ -94,3 +94,47 @@
 .NoteView .viewDetails span{
     font-size: 150%
 }
+
+.NoteView .deleteNote {
+    float:right;
+    height: 3em;
+    width: 10em;
+    border-top-style: solid;
+    border-left-style: solid;
+    text-align: center;
+    line-height: 3em;
+    font-size: 65%;
+    cursor: pointer;
+}
+
+.NoteView .deleteNote:hover {
+    color: #607D8B;;
+}
+.NoteView .deleteNote span{
+    font-size: 150%
+}
+
+.NoteView .editNote {
+    float:right;
+    height: 3em;
+    width: 10em;
+    border-top-style: solid;
+    border-left-style: solid;
+    text-align: center;
+    line-height: 3em;
+    font-size: 65%;
+    cursor: pointer;
+}
+
+.NoteView .editNote:hover {
+    color: #607D8B;
+}
+.NoteView .editNote span{
+    font-size: 150%
+}
+
+.clear{
+    clear: both;
+}
+
+

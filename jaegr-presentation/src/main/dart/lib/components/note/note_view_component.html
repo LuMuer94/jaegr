@@ -14,15 +14,14 @@
     <div class="content">
         <span>{{note.content}}</span>
     </div>
+    <div *ngIf="user!=null && user==note.author" class="deleteNote">
+        <span>Delete Note</span>
+    </div>
+    <div *ngIf="user!=null && user==note.author" class="editNote">
+        <span>Edit Note</span>
+    </div>
     <div class="viewDetails">
         <span>View Details</span>
     </div>
-    <div *ngIf="user!=null && user==note.author" class="authorOperations">
-        <div class="editNote">
-           <span>Edit Note</span>
-        </div>
-        <div class="deleteNote">
-            <span>Delete Note</span>
-        </div>
-    </div>
+    <div class="clear"></div>
 </div>

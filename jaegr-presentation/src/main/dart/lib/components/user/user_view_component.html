@@ -16,7 +16,7 @@
 </ul>
     <!-- Group view -->
 <div *ngIf="selectedGroup() != null" class="selectedGroup">
-    <group-view [group]="selectedGroup()"></group-view>
+    <group-view [group]="selectedGroup()" [user]="user">  </group-view>
 </div>
 </div>
 </div>
