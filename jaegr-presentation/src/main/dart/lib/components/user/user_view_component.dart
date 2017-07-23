@@ -15,10 +15,9 @@ import 'package:jaegr/model/user.dart';
 
 @Component(
   selector: 'my-view',
-  directives: const [CreateGroup],
   templateUrl: 'user_view_component.html',
   styleUrls: const ['user_view_component.css'],
-  directives: const [NoteComponent, NoteEdit],
+  directives: const [NoteComponent, NoteEdit,CreateGroup],
   providers: const [AbstractService]
 )
 
@@ -30,11 +29,11 @@ class UserViewComponent implements OnInit{
   final Context context;
   List<Group> groups;
 
-  Group selectedGroup;
-
   List<Note> groupNotes;
   Note selectedNote;
   User user;
+
+  selectedGroup() => context.selectedGroup;
 
   UserViewComponent(
       this.context,
@@ -51,34 +50,19 @@ class UserViewComponent implements OnInit{
     groups = await service.getGroupsByUser(user.id);
   }
 
-  printTest(){
-    print( service.getCurrentUser().then( (u) => u.id ));
-  }
-
 
   Future<Null> onSelect(Group group) async{
-    selectedGroup = group;
-    groupNotes = await service.getNotesByGroup(selectedGroup.id);
-  }
-
-  void select( Group group ){
-    selectedGroup=group;
+    context.selectedGroup = group;
+    groupNotes = await service.getNotesByGroup(selectedGroup().id);
   }
 
   void addGroup( Group group){
     groups.add(group);
-    selectedGroup = group;
+    context.selectedGroup = group;
   }
 
   void startCreatingGroup(){
     context.creatingGroup=true;
   }
 
-  Future<Null> selectNote(Note note) async{
-    print(note!= null ? "Es lebt!" : "null -.-");
-    if(this.selectedNote != note)
-      this.selectedNote = note;
-    else
-      selectedNote = null;
-  }
 }

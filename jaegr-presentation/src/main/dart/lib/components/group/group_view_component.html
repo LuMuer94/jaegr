@@ -1,0 +1,19 @@
+<div class="groupView">
+    <div class="groupViewHeader">
+        <div class="main">
+
+        </div>
+        <div class="addNote">
+
+        </div>
+    </div>
+
+</div>
+<h2>
+    {{selectedGroup.name | uppercase}}
+</h2>
+<ul *ngIf="groupNotes!=null" class="notes">
+    <li *ngFor="let note of groupNotes">
+        <note [note]="note" (click)="selectNote(note)"></note>
+    </li>
+</ul>
