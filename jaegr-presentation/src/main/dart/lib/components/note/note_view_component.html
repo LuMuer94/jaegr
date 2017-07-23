@@ -17,7 +17,7 @@
     <div class="viewDetails">
         <span>View Details</span>
     </div>
-    <div *ngIf="user==note.author" class="authorOperations">
+    <div *ngIf="user!=null && user==note.author" class="authorOperations">
         <div class="editNote">
            <span>Edit Note</span>
         </div>

@@ -125,3 +125,11 @@
     top: -62px;
 }
 
+.groupNotes {
+    position: relative;
+    top: -3em;
+}
+.groupNotes li{
+    list-style-type: none;
+}
+
