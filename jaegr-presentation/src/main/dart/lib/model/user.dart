@@ -17,3 +17,4 @@ class User {
     return json.map((u) => new User.fromJson(u));
   }
 }
+

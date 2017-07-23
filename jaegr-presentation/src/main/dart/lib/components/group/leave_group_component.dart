@@ -22,8 +22,9 @@ class LeaveGroup implements OnInit{
   final MockService restService;
   final RouteParams _routeParams;
   final Router _router;
+  final Context context;
 
-  LeaveGroup(this.restService, this._routeParams, this._router);
+  LeaveGroup(this.restService, this._routeParams, this._router, this.context);
 
 
   @override
@@ -40,6 +41,7 @@ class LeaveGroup implements OnInit{
   Future<Null> leaveGroup() async{
     try{
       await restService.removeUserToGroup(group.id, user.id);
+      context.selectedGroup = null;
       goBack();
     }
     catch(e){

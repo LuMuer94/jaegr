@@ -17,7 +17,6 @@ class Group {
     this.name = json["name"];
     this.id = json["id"];
     this.admin= new User.fromJson(json["admin"]);
-    this.users = json["users"].map((u) => new User.fromJson(u));
   }
 
   static List<Group> fromJsonList(List json) {

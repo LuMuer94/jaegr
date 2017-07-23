@@ -15,7 +15,7 @@
     </li>
 </ul>
     <!-- Group view -->
-<div *ngIf="selectedGroup() != null" class="selectedGroup">
+<div *ngIf="selectedGroup()!=null && selectedGroup().users.contains(user)" class="selectedGroup">
     <group-view [group]="selectedGroup()" [user]="user">  </group-view>
 </div>
 </div>
