@@ -7,4 +7,5 @@ import 'package:jaegr/model/user.dart';
 class Context{
   bool loggedIn;
   bool creatingGroup;
+  bool addingUser;
 }
