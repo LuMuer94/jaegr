@@ -5,10 +5,12 @@ import 'dart:async';
 import 'dart:html';
 import 'package:angular2/core.dart';
 import 'package:jaegr/components/group/create_group_component.dart';
+import 'package:jaegr/components/group/group_view_component.dart';
 import 'package:jaegr/components/newest/newest_component.dart';
 import 'package:jaegr/components/create/create_component.dart';
 import 'package:jaegr/components/login/login_component.dart';
 import 'package:angular2/router.dart';
+import 'package:jaegr/components/note/note_view_component.dart';
 import 'package:jaegr/components/register/register_component.dart';
 import 'package:jaegr/components/service/AbstractService.dart';
 import 'package:jaegr/components/service/MockService.dart';
@@ -35,7 +37,7 @@ import 'package:jaegr/model/util.dart';
       <router-outlet></router-outlet>
     ''',
     styleUrls: const ['app_component.css'],
-    directives: const [Login,ShowNewest,CreateNews,Register,UserViewComponent,CreateGroup,ROUTER_DIRECTIVES],
+    directives: const [Login,ShowNewest,CreateNews,Register,UserViewComponent,CreateGroup,GroupView,NoteView,ROUTER_DIRECTIVES],
     providers: const [ROUTER_PROVIDERS,UserService,GroupService])
 
 @RouteConfig(const [

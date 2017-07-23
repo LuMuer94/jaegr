@@ -6,7 +6,6 @@ import 'package:jaegr/components/service/MockService.dart';
 
 @Component(
   selector: 'note-edit',
-  styleUrls: const ['note_component.css'],
   templateUrl: 'note_edit_component.html',
   directives: const [COMMON_DIRECTIVES],
 )

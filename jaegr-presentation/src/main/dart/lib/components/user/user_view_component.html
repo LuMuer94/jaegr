@@ -14,7 +14,10 @@
         <span class="badge">{{group.id}}</span><span class="groupName">{{group.name}}</span>
     </li>
 </ul>
-<group-view [group]="selectedGroup()" ></group-view>
+    <!-- Group view -->
+<div *ngIf="selectedGroup() != null" class="selectedGroup">
+    <group-view [group]="selectedGroup()"></group-view>
+</div>
 </div>
 </div>
 <div *ngIf="isCreatingGroup()">

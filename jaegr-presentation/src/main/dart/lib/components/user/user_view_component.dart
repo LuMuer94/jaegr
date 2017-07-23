@@ -2,7 +2,7 @@ import 'dart:async';
 import 'package:angular2/angular2.dart';
 import 'package:angular2/router.dart';
 import 'package:jaegr/components/group/create_group_component.dart';
-import 'package:jaegr/components/note/note_component.dart';
+import 'package:jaegr/components/group/group_view_component.dart';
 import 'package:jaegr/components/note/note_edit_component.dart';
 import 'package:jaegr/components/service/AbstractService.dart';
 import 'package:jaegr/components/service/MockService.dart';
@@ -17,7 +17,7 @@ import 'package:jaegr/model/user.dart';
   selector: 'my-view',
   templateUrl: 'user_view_component.html',
   styleUrls: const ['user_view_component.css'],
-  directives: const [NoteComponent, NoteEdit,CreateGroup],
+  directives: const [NoteEdit,CreateGroup,GroupView],
   providers: const [AbstractService]
 )
 

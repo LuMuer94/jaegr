@@ -1,9 +1,14 @@
+/* group view */
+
 /* Group view header style */
 
 .groupViewHeader {
     width:70em;
     height:10em;
     text-align: center;
+    line-height: 10em;
+    position: relative;
+    top: -39px;
 }
 
 .groupViewHeader .main{
@@ -17,12 +22,14 @@
     font-size: 300%;
     position: relative;
     top:-50px;
+    position: relative;
+    top: -35px;
 }
 
 .groupViewHeader .main .addUser{
     position: relative;
-    left: 62em;
-    bottom: 168px;
+    top: -198px;
+    left: 989px;
     cursor: pointer;
     background-color: #EEE;
     width: 8em;
@@ -38,29 +45,28 @@
 .groupViewHeader .main .addUser .badge {
     display: inline-block;
     background-color: rgba(31,139,35,0.72);
-    position: relative;
     height: 2em;
     width: 2em;
+    position: relative;
+    left: -13px;
     border-radius: 0px 0px 0px 4px;
-    left:-12px;
 }
 .groupViewHeader .main .addUser .badge .symbol {
     color:white;
     font-size: 2.7em;
     position: relative;
-    left: 5px;
-    top: -9px;
+    top: -65px;
 }
 
 .groupViewHeader .main .addUser .text {
     font-size: 1.1em;
     position: relative;
-    top: -18px;
+    top: -70px;
 }
 
 .groupViewHeader .addNote{
     position: relative;
-    left: 62em;
+    margin: 3px;
     bottom: 0px;
     cursor: pointer;
     background-color: #EEE;
@@ -87,19 +93,19 @@
     color:white;
     font-size: 2.7em;
     position: relative;
-    left: 5px;
-    top: -9px;
+    top: -64px;
 }
 
 .groupViewHeader .addNote .text {
     font-size: 1.1em;
     position: relative;
-    top: -18px;
+    top: -70px;
 }
 
 .groupViewHeader .viewUsers{
     position: relative;
-    bottom: 0px;
+    bottom: 230px;
+    left: 3px;
     cursor: pointer;
     background-color: #EEE;
     width: 8em;
@@ -113,10 +119,9 @@
 }
 
 
-.groupViewHeader .viewUsers .text {
+.groupViewHeader .viewUsers span {
     font-size: 1.1em;
     position: relative;
-    top: 4px;
+    top: -62px;
 }
-
 
