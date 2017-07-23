@@ -26,6 +26,8 @@
     top: -35px;
 }
 
+/* Add user */
+
 .groupViewHeader .main .addUser{
     position: relative;
     top: -198px;
@@ -63,6 +65,49 @@
     position: relative;
     top: -70px;
 }
+
+/* leave Group */
+
+.groupViewHeader .main .leaveGroup{
+    position: relative;
+    top: -198px;
+    left: 989px;
+    cursor: pointer;
+    background-color: #EEE;
+    width: 8em;
+    height: 2em;
+    border-radius: 0px 3px 0px 4px;
+}
+
+.groupViewHeader .main .leaveGroup:hover {
+    color: #607D8B;
+    background-color: #EEE;
+}
+
+.groupViewHeader .main .leaveGroup .badge {
+    display: inline-block;
+    background-color: rgba(139,19,25,0.71);
+    height: 2em;
+    width: 2em;
+    position: relative;
+    left: -13px;
+    border-radius: 0px 0px 0px 4px;
+}
+.groupViewHeader .main .leaveGroup .badge .symbol {
+    color:white;
+    font-size: 2.7em;
+    position: relative;
+    top: -65px;
+}
+
+.groupViewHeader .main .leaveGroup .text {
+    font-size: 1.1em;
+    position: relative;
+    top: -72px;
+    right: 8px;
+}
+
+/* add note */
 
 .groupViewHeader .addNote{
     position: relative;

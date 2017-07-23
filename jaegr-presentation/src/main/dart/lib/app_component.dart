@@ -6,11 +6,14 @@ import 'dart:html';
 import 'package:angular2/core.dart';
 import 'package:jaegr/components/group/create_group_component.dart';
 import 'package:jaegr/components/group/group_view_component.dart';
+import 'package:jaegr/components/group/leave_group_component.dart';
 import 'package:jaegr/components/group/member_view_component.dart';
 import 'package:jaegr/components/newest/newest_component.dart';
 import 'package:jaegr/components/create/create_component.dart';
 import 'package:jaegr/components/login/login_component.dart';
 import 'package:angular2/router.dart';
+import 'package:jaegr/components/note/note_detail_component.dart';
+import 'package:jaegr/components/note/note_edit_component.dart';
 import 'package:jaegr/components/note/note_view_component.dart';
 import 'package:jaegr/components/register/register_component.dart';
 import 'package:jaegr/components/service/AbstractService.dart';
@@ -39,7 +42,8 @@ import 'package:jaegr/model/util.dart';
       <router-outlet></router-outlet>
     ''',
     styleUrls: const ['app_component.css'],
-    directives: const [Login,ShowNewest,CreateNews,Register,UserViewComponent,CreateGroup,GroupView,NoteView,MemberView,UserSearch,ROUTER_DIRECTIVES],
+    directives: const [Login,ShowNewest,CreateNews,Register,UserViewComponent,
+    CreateGroup,GroupView,NoteView,MemberView,UserSearch,NoteDetail,NoteEdit,ROUTER_DIRECTIVES],
     providers: const [ROUTER_PROVIDERS,UserService,GroupService])
 
 @RouteConfig(const [
@@ -48,7 +52,10 @@ import 'package:jaegr/model/util.dart';
   const Route(path: '/news', name: 'ShowNewest', component: ShowNewest),
   const Route(path: '/register', name: 'Register', component: Register),
   const Route(path: '/userView', name:'UserView', component: UserViewComponent),
-  const Route(path: '/memberView/:id', name: 'MemberView', component: MemberView)
+  const Route(path: '/memberView/:id', name: 'MemberView', component: MemberView),
+  const Route(path: '/noteDetail/:id', name: 'NoteDetail', component: NoteDetail),
+  const Route(path: '/noteEdit/:id', name: 'NoteEdit', component: NoteEdit),
+  const Route(path: '/leaveGroup/:id', name: 'LeaveGroup', component: LeaveGroup)
 ])
 
 class AppComponent implements OnInit{

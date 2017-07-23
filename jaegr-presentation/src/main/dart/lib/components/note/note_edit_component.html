@@ -1,10 +1,23 @@
-<div>
-    <ul>
-        <li><label>ID:</label> {{note2Edit.id}}</li>
-        <li><label>Titel:</label> <input [(ngModel)]="note2Edit.title" placeholder="Titel"></li>
-        <li><label>Inhalt:</label> <input [(ngModel)]="note2Edit.content" placeholder="Inhalt"></li>
-        <li><label>Datum:</label> <br><span>{{note2Edit.date}}</span></li>
-    </ul>
-    <button class="buttonNoteEdit" (click)="submit()">Bestätigen</button>
-    <button class="buttonNoteEdit" (click)="delete()">Löschen</button>
+<div *ngIf="note!=null" class="NoteView">
+    <div class="titleText">
+        <span>Title:</span>
+    </div>
+    <div class="title">
+        <input [(ngModel)]="title" placeholder="Title:">
+    </div>
+    <div class="content">
+        <textarea [(ngModel)]="content" placeholder="Content"></textarea>
+    </div>
 </div>
+<div *ngIf="note!=null && (isDeletingNote()==null || !isDeletingNote() )">
+    <button id="back" (click)="goBack()">Back</button>
+    <button class="submit" (click)="submit()">Submit Changes</button>
+    <button class="abort" (click)="wantsToDeleteNote()">Delete Note</button>
+</div>
+<div *ngIf="note!=null && isDeletingNote()!=null && isDeletingNote()" class="deleteArea">
+    <div>Do you really want to delete this note?</div>
+    <button class="submit" (click)="delete()">Yes</button>
+    <button class="abort" (click)="abort()">No</button>
+</div>
+
+

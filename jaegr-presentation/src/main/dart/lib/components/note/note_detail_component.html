@@ -14,13 +14,5 @@
     <div class="content">
         <span>{{note.content}}</span>
     </div>
-    <div *ngIf="user!=null && user==note.author" class="deleteNote" (click)="wantsToDelete()">
-        <span>Delete Note</span>
-    </div>
-    <div *ngIf="user!=null && user==note.author" class="editNote" (click)="edit()">
-        <span>Edit Note</span>
-    </div>
-    <div class="viewDetails" (click)="viewDetails()">
-        <span>View Details</span>
-    </div>
 </div>
+<button id="back" (click)="goBack()">Back</button>

@@ -11,18 +11,24 @@ import 'package:jaegr/model/user.dart';
     templateUrl: 'note_view_component.html',
   styleUrls: const ['note_view_component.css'],
 )
-class NoteView{
+class NoteView implements OnInit{
   @Input()
   Note note;
 
   @Input()
   User user;
 
+
   final Router _router;
   final Context context;
   final MockService restService;
 
   NoteView(this._router, this.context, this.restService);
+
+  wantsToDelete(){
+    context.deleteNote =true;
+    edit();
+  }
 
   String formatDate( DateTime date )
   {
@@ -31,9 +37,23 @@ class NoteView{
     return formatted;
   }
 
+  Future viewDetails() async {
+    _router.navigate([
+      'NoteDetail',
+      {'id': note.id.toString()}
+    ]);
+  }
+
+  Future edit() async {
+    _router.navigate([
+      'NoteEdit',
+      {'id': note.id.toString()}
+    ]);
+  }
 
 
-
-
-
+  @override
+  ngOnInit() {
+    context.deleteNote =false;
+  }
 }

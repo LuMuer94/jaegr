@@ -1,32 +1,74 @@
 import 'dart:async';
+import 'dart:html';
 import 'package:angular2/router.dart';
 import 'package:angular2/angular2.dart';
+import 'package:jaegr/components/shared/context.dart';
 import 'package:jaegr/model/note.dart';
 import 'package:jaegr/components/service/MockService.dart';
 
 @Component(
   selector: 'note-edit',
   templateUrl: 'note_edit_component.html',
+  styleUrls: const ['note_edit_component.css'],
   directives: const [COMMON_DIRECTIVES],
 )
 
-class NoteEdit
-{
-  @Input()
-  Note note2Edit;
-  final MockService _service;
+class NoteEdit implements OnInit{
 
-  NoteEdit(this._service);
+  Note note;
+  String title;
+  String content;
+
+  final Router _router;
+  final RouteParams _routeParams;
+  final Context context;
+  final MockService restService;
+
+  NoteEdit(this._router, this._routeParams, this.context, this.restService);
+
+  isDeletingNote() => context.deleteNote;
+
+  @override
+  Future<Null>ngOnInit() async{
+  var _id = _routeParams.get('id');
+  var id = int.parse(_id ?? '', onError: (_) => null);
+  note = await restService.getNoteById(id);
+  this.title = note.title;
+  this.content = note.content;
+  }
+
+  void goBack() => _router.navigate(['UserView']);
 
 
   Future<Null> submit() async{
-    print(this.note2Edit.id);
-    _service.editNote(note2Edit.id, note2Edit.title, note2Edit.content);
+    try{
+      await restService.editNote(note.id, title, content);
+      goBack();
+    }
+    catch(e){
+      window.alert( "Changing Note failed");
+    }
+  }
+
+  void wantsToDeleteNote()
+  {
+    context.deleteNote=true;
+  }
+
+  void abort()
+  {
+    context.deleteNote=false;
   }
 
   Future<Null> delete() async{
-
-    _service.deleteNote(this.note2Edit.id);
-
+    try{
+      await restService.deleteNote(note.id);
+      window.alert("Note deleted");
+      goBack();
+    }
+    catch(e){
+      window.alert( "Deleting Note failed");
+    }
   }
+
 }

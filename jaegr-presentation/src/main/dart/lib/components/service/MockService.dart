@@ -112,7 +112,7 @@ class MockService extends AbstractService {
   @override
   Future<Note> getNoteById(int id) {
     try {
-      return new Future.value(users.firstWhere((u) => u.id == id ));
+      return new Future.value(notes.firstWhere((u) => u.id == id ));
     } catch(ex) {
       return new Future.error("No note found");
     }
