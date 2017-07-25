@@ -1,0 +1,15 @@
+<div>
+    <h3>Group Creation</h3>
+    <form>
+        <dl>
+            <dt>
+                <label for="name">Name of your Group</label>
+            </dt>
+            <dd>
+                <input [(ngModel)]="name" id="name" type="text" required>
+            </dd>
+        </dl>
+        <button class="create" type="submit" (click)="createGroup($event)">Create</button>
+        <button class="close" type="submit" (click)="close($event)">Close</button>
+    </form>
+</div>

@@ -4,7 +4,6 @@ import 'dart:html';
 import 'package:jaegr/components/service/MockService.dart';
 import 'package:jaegr/components/shared/context.dart';
 import 'package:jaegr/model/group.dart';
-import 'package:jaegr/model/news.dart';
 
 @Component(
     selector: 'create-group',

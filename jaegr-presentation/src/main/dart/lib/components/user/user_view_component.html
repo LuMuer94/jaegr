@@ -1,31 +1,23 @@
 <div *ngIf="user != null">
 <h1>{{user.name}}</h1>
+    <!-- creating Group -->
 <div *ngIf="!isCreatingGroup()">
 <div class="createNewGroup" (click)="startCreatingGroup()">
     <span class="badge"><span class="symbol">+</span></span><span class="text">new Group</span>
 </div>
+    <!--Group list -->
 <div *ngIf="groups!=null">
 <ul class="groups">
     <li *ngFor="let group of groups"
-        [class.selected]="group == selectedGroup"
+        [class.selected]="group == selectedGroup()"
         (click)="onSelect(group)">
         <span class="badge">{{group.id}}</span><span class="groupName">{{group.name}}</span>
     </li>
 </ul>
-<div class="groupSelect" *ngIf="selectedGroup != null">
-    <h2>
-        {{selectedGroup.name | uppercase}}
-    </h2>
-    <ul *ngIf="groupNotes!=null" class="notes">
-        <li *ngFor="let note of groupNotes">
-            <note [note]="note" (click)="selectNote(note)"></note>
-        </li>
-    </ul>
-
+    <!-- Group view -->
+<div *ngIf="selectedGroup()!=null && selectedGroup().users.contains(user)" class="selectedGroup">
+    <group-view [group]="selectedGroup()" [user]="user" [groupNotes]="groupNotes">  </group-view>
 </div>
-    <div class="noteEdit" *ngIf="selectedNote!= null">
-        <note-edit [note2Edit]="selectedNote"></note-edit>
-    </div>
 </div>
 </div>
 <div *ngIf="isCreatingGroup()">

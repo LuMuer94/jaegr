@@ -1,0 +1,12 @@
+<div *ngIf="group!=null" id="search-component">
+    <h4>Search for Users to add</h4>
+    <input #searchBox id="search-box"
+           (change)="search(searchBox.value)"
+           (keyup)="search(searchBox.value)" />
+    <div class="searchList">
+        <div *ngFor="let user of users | async"
+             (click)="addUser(user)" class="search-result" >
+            {{user.name}}
+        </div>
+    </div>
+</div>

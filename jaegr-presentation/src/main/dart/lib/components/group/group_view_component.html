@@ -1,0 +1,29 @@
+<div *ngIf="group!=null" class="groupView">
+    <div class="groupViewHeader">
+        <div class="main">
+            <h2>{{group.name}}</h2>
+            <div *ngIf="user==group.admin" class="addUser" (click)="startAddingUser()">
+                <span class="badge"><span class="symbol">+</span></span><span class="text">add User</span>
+            </div>
+            <div *ngIf="user!=group.admin" class="leaveGroup" (click)="leaveGroup()">
+                <span class="badge"><span class="symbol">-</span></span><span class="text">leave Group</span>
+            </div>
+            <div class="viewUsers" (click)="viewUsers()">
+                <span *ngIf="user==group.admin">edit Users</span>
+                <span *ngIf="user!=group.admin">view Users</span>
+            </div>
+        </div>
+        <div class="addNote" (click)="startAddingNote()">
+            <span class="badge"><span class="symbol">+</span></span><span class="text">add Note</span>
+        </div>
+    </div>
+    <note-add [group]="group" (newNote)="addNote($event)"></note-add>
+    <div *ngIf="groupNotes!=null" class="groupNotes">
+        <ul>
+            <li *ngFor="let note of groupNotes">
+                <note-view [note]="note" [user]="user" ></note-view>
+            </li>
+        </ul>
+    </div>
+</div>
+
