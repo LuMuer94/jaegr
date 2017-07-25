@@ -45,10 +45,10 @@ public class GroupDAO extends BaseDAO{
         DBGroup newGroup = new DBGroup();
         newGroup.setOwner(user);
         newGroup.setUsers(new HashSet<>());
-        newGroup.getUsers().add(user);
         newGroup.setName(name);
-
         entityManager.persist(newGroup);
+
+        newGroup.getUsers().add(user);
         return newGroup;
     }
 
