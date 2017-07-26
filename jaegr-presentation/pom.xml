@@ -57,6 +57,30 @@
 					<dartSdk>${env.DART_SDK}</dartSdk>
 				</configuration>
 				<executions>
+					<execution>
+						<id>pub-get</id>
+						<phase>compile</phase>
+						<goals>
+							<goal>pub</goal>
+						</goals>
+						<configuration>
+							<pubCommand>get</pubCommand>
+						</configuration>
+					</execution>
+					<execution>
+						<id>pub-build</id>
+						<phase>compile</phase>
+						<goals>
+							<goal>pub</goal>
+						</goals>
+						<configuration>
+							<pubCommand>build</pubCommand>
+							<pubOptions>
+								<pubOption>--output=${project.build.directory}/dart</pubOption>
+								<pubOption>--mode=debug</pubOption>
+							</pubOptions>
+						</configuration>
+					</execution>
 				</executions>
 			</plugin>
 
