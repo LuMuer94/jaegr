@@ -2,6 +2,7 @@ package com.jaegr.model;
 
 import org.h2.command.ddl.CreateUser;
 
+import javax.validation.constraints.NotNull;
 import javax.xml.bind.annotation.XmlRootElement;
 
 /**
@@ -9,6 +10,7 @@ import javax.xml.bind.annotation.XmlRootElement;
  */
 @XmlRootElement
 public class CreateUserParam {
+    @NotNull
     private String name;
     private String password;
 

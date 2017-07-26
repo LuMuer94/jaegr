@@ -6,6 +6,7 @@ import com.jaegr.daos.GroupDAO;
 import com.jaegr.daos.UserDAO;
 import com.jaegr.model.CreateGroupParam;
 import com.jaegr.model.GroupView;
+import org.apache.shiro.authz.Permission;
 import org.apache.shiro.authz.annotation.RequiresUser;
 
 import javax.persistence.EntityManager;
@@ -49,7 +50,6 @@ public class GroupCRUD {
         CRUDUtils.checkPermission(new IsOwnerPermission(userId));
 
         Set<DBGroup> groups = userDao.get(userId).getGroups();
-        System.out.println("GroupsByUser(" + userId + "): " + groups.size());
         return groups.stream()
                 .map(GroupView::new)
                 .collect(Collectors.toSet());
@@ -95,12 +95,11 @@ public class GroupCRUD {
         GroupDAO dao = new GroupDAO(entityManager);
         DBGroup group = dao.get(id);
 
-        CRUDUtils.checkPermission(new IsOwnerPermission(group.getOwner()));
+        CRUDUtils.checkAnyPermissions(new Permission[]{new IsOwnerPermission(userId), new IsOwnerPermission(group.getOwner())});
 
         //Owner can not be deleted
-        if(group.getOwner().getId() == userId) {
-            throw new NotAcceptableException();//ToDo: proper exception
-        }
+        if(group.getOwner().getId() == userId)
+            throw new NotAcceptableException();
 
         UserDAO userDao = new UserDAO(entityManager);
         DBUser userToRemove = userDao.get(userId);

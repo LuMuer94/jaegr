@@ -7,25 +7,24 @@ import org.apache.shiro.subject.Subject;
 
 import javax.ws.rs.NotAuthorizedException;
 import javax.ws.rs.core.Response;
+import java.util.Arrays;
 
 /**
  * Created by jonas on 10.07.17.
  */
 public class CRUDUtils {
     public static void checkPermission(Permission permission) {
-        final Subject subject = SecurityUtils.getSubject();
-
-        if (!subject.isPermitted(permission)) {
-            throw new NotAuthorizedException(Response.status(Response.Status.UNAUTHORIZED).build());
-        }
+        checkAnyPermissions(new Permission[]{permission});
     }
 
-    public static void checkPermission(String s) {
+    public static void checkAnyPermissions(Permission[] permission) {
         final Subject subject = SecurityUtils.getSubject();
 
-        if (!subject.isPermitted(s)) {
+        boolean any = Arrays.stream(permission)
+                            .anyMatch(subject::isPermitted);
+
+        if(!any)
             throw new NotAuthorizedException(Response.status(Response.Status.UNAUTHORIZED).build());
-        }
     }
 
     public static long getCurrentUserId() {

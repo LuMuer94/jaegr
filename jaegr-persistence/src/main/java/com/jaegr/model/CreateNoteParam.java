@@ -1,10 +1,14 @@
 package com.jaegr.model;
 
+import javax.validation.constraints.NotNull;
+
 /**
  * Created by jonas on 07.07.17.
  */
 public class CreateNoteParam {
+    @NotNull
     private String title;
+    @NotNull
     private String content;
     private long groupId;
 

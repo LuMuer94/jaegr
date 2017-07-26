@@ -6,6 +6,7 @@ import com.jaegr.daos.GroupDAO;
 import com.jaegr.daos.NoteDAO;
 import com.jaegr.daos.UserDAO;
 import com.jaegr.model.*;
+import org.apache.shiro.authz.Permission;
 import org.apache.shiro.authz.annotation.RequiresUser;
 
 import javax.persistence.EntityManager;
@@ -91,6 +92,29 @@ public class NoteCRUD {
         CRUDUtils.checkPermission(new IsOwnerPermission(note.getUser()));
 
         note = dao.editNote(id, param);
+        return new NoteView(note);
+    }
+
+    @GET
+    @Path("/{id}")
+    @Produces({ MediaType.APPLICATION_JSON})
+    @RequiresUser
+    public NoteView get(@PathParam("id") final long id){
+        long curUserId = CRUDUtils.getCurrentUserId();
+
+        NoteDAO dao = new NoteDAO(entityManager);
+        DBNote note = dao.get(id);
+
+        GroupDAO groupDao = new GroupDAO(entityManager);
+        UserDAO userDao = new UserDAO(entityManager);
+        DBUser user = userDao.get(curUserId);
+
+        boolean isMember = groupDao.checkIsMember(note.getGroup().getId(), user);
+
+        CRUDUtils.checkAnyPermissions(
+                new Permission[]{ new IsOwnerPermission(note.getUser()), new IsGroupMemberPermission(isMember)}
+        );
+
         return new NoteView(note);
     }
 

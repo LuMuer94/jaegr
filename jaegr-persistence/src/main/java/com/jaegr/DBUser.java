@@ -34,9 +34,6 @@ public class DBUser extends DBIdentified {
 
     @ManyToMany
     public Set<DBUser> getFriends() {
-        if (friends == null) {
-            friends = new HashSet<>();
-        }
         return friends;
     }
 
@@ -46,9 +43,6 @@ public class DBUser extends DBIdentified {
 
     @OneToMany(mappedBy = "user")
     public Set<DBNote> getNotes() {
-        if(notes == null){
-            notes = new HashSet<>();
-        }
         return notes;
     }
 
@@ -66,9 +60,6 @@ public class DBUser extends DBIdentified {
 
     @ManyToMany(mappedBy = "users")
     public Set<DBGroup> getGroups() {
-        if (groups == null) {
-            groups = new HashSet<>();
-        }
         return groups;
     }
 
