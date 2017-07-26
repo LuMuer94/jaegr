@@ -7,7 +7,7 @@
         </div>
     </div>
     <button id="back" (click)="goBack()">Back</button>
-    <button *ngIf="!isAddingUser()" id="openUserSearch" (click)="startAddingUser()">Search for users to add</button>
+    <button *ngIf="!isAddingUser() && user.equals(group.admin)" id="openUserSearch" (click)="startAddingUser()">Search for users to add</button>
     <div *ngIf="toAdd!=null" class="addArea">
         <span>Do you want to add {{toAdd.name}} to your group?</span>
         <button id="yes" (click)="confirm($event)">Yes</button>
@@ -20,17 +20,19 @@
     <div class="clear"></div>
     <div class="members">
         <ul>
-            <li *ngFor="let user of members">
+            <li *ngFor="let member of members">
                 <div class="member">
-                     <span class="badge">{{user.id}}</span>
-                    <span>{{user.name}}</span>
-                     <button *ngIf="!user.equals(group.admin)" class="delete"
-                        (click)="wantsToDeleteUser(user)">x</button>
+                     <span class="badge">{{member.id}}</span>
+                    <span>{{member.name}}</span>
+                     <button *ngIf="!member.equals(group.admin) && user.equals(group.admin)" class="delete"
+                        (click)="wantsToDeleteUser(member)">x</button>
                 </div>
-                <div *ngIf="toDelete!=null && user.equals(toDelete)" class="deleteArea">
-                    <span>Do you want to delete {{toDelete.name}} from your group?</span>
+                <div *ngIf="toDelete!=null && member.equals(toDelete)" class="deleteArea">
+                    <div>Do you want to delete {{toDelete.name}} from your group?</div>
                     <button class="yes" (click)="confirmDelete(); $event.stopPropagation()">Yes</button>
                     <button class="no" (click)="abortDelete(); $event.stopPropagation()">No</button>
+                    <br>
+                    <br>
                 </div>
             </li>
         </ul>

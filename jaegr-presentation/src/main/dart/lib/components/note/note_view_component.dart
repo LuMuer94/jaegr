@@ -32,7 +32,7 @@ class NoteView implements OnInit{
 
   String formatDate( DateTime date )
   {
-    var formatter = new DateFormat('yyyy-MM-dd H:m:s');
+    var formatter = new DateFormat('yyyy-MM-dd  H:m:s');
     String formatted = formatter.format(date);
     return formatted;
   }

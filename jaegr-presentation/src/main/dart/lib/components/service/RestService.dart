@@ -41,7 +41,7 @@ class RestService extends AbstractService {
   @override
   Future<Group> createGroup(String name) {
     GroupCreateData gcd = new GroupCreateData(name);
-    return doRequest("rest/groups/create", "POST", gcd.toJSON(), true).then((s) { print(s);
+    return doRequest("rest/groups/create", "POST", gcd.toJSON(), true).then((s) {
       return new Group.fromJson(JSON.decode(s));
     });
   }
@@ -83,7 +83,7 @@ class RestService extends AbstractService {
 
   @override
   Future<List<Group>> getGroupsByUser(int id) {
-    return doRequest("rest/groups/byUser/$id", "GET", null, true).then((s) { print(s);
+    return doRequest("rest/groups/byUser/$id", "GET", null, true).then((s) {
       return Group.fromJsonList(JSON.decode(s));
     });
   }

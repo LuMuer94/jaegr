@@ -25,7 +25,7 @@ class Note{
     this.title= json["title"];
     this.content = json["content"];
     this.groupName = json ["groupName"];
-    this.date = new DateTime.fromMicrosecondsSinceEpoch(json ["date"], isUtc: true );
+    this.date = new DateTime.fromMillisecondsSinceEpoch(json ["date"]);
     this.groupId = json ["groupId"];
     this.id = json ["id"];
   }
