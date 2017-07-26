@@ -47,7 +47,10 @@ public class GroupCRUD {
         UserDAO userDao = new UserDAO(entityManager);
 
         CRUDUtils.checkPermission(new IsOwnerPermission(userId));
-        return userDao.get(userId).getGroups().stream()
+
+        Set<DBGroup> groups = userDao.get(userId).getGroups();
+        System.out.println("GroupsByUser(" + userId + "): " + groups.size());
+        return groups.stream()
                 .map(GroupView::new)
                 .collect(Collectors.toSet());
     }
