@@ -1,0 +1,26 @@
+<div *ngIf="note!=null" class="NoteView">
+    <div class="date">
+        <span>{{formatDate( note.date )}}</span>
+    </div>
+    <div class="author">
+        <span>{{note.author.name}}</span>
+    </div>
+    <div class="titleText">
+        <span>Title:</span>
+    </div>
+    <div class="title">
+        <span>{{note.title}}</span>
+    </div>
+    <div class="content">
+        <span>{{note.content}}</span>
+    </div>
+    <div *ngIf="user!=null && user.equals(note.author)" class="deleteNote" (click)="wantsToDelete()">
+        <span>Delete Note</span>
+    </div>
+    <div *ngIf="user!=null && user.equals(note.author)" class="editNote" (click)="edit()">
+        <span>Edit Note</span>
+    </div>
+    <div class="viewDetails" (click)="viewDetails()">
+        <span>View Details</span>
+    </div>
+</div>

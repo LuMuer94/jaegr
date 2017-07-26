@@ -1,0 +1,38 @@
+<div class="memberView" *ngIf="members != null && user.isMemberOf(group)">
+    <div class="memberViewHeader">
+        <div class="main">
+            <h2>
+                Members of {{group.name}}:
+            </h2>
+        </div>
+    </div>
+    <button id="back" (click)="goBack()">Back</button>
+    <button *ngIf="!isAddingUser()" id="openUserSearch" (click)="startAddingUser()">Search for users to add</button>
+    <div *ngIf="toAdd!=null" class="addArea">
+        <span>Do you want to add {{toAdd.name}} to your group?</span>
+        <button id="yes" (click)="confirm($event)">Yes</button>
+        <button id="no" (click)="abort($event)">No</button>
+    </div>
+    <div *ngIf="isAddingUser()">
+        <user-search [group]="group" (newUser)="wantsToAddUser($event)"></user-search>
+        <p>Test</p>
+    </div>
+    <div class="clear"></div>
+    <div class="members">
+        <ul>
+            <li *ngFor="let user of members">
+                <div class="member">
+                     <span class="badge">{{user.id}}</span>
+                    <span>{{user.name}}</span>
+                     <button *ngIf="!user.equals(group.admin)" class="delete"
+                        (click)="wantsToDeleteUser(user)">x</button>
+                </div>
+                <div *ngIf="toDelete!=null && user.equals(toDelete)" class="deleteArea">
+                    <span>Do you want to delete {{toDelete.name}} from your group?</span>
+                    <button class="yes" (click)="confirmDelete(); $event.stopPropagation()">Yes</button>
+                    <button class="no" (click)="abortDelete(); $event.stopPropagation()">No</button>
+                </div>
+            </li>
+        </ul>
+    </div>
+</div>

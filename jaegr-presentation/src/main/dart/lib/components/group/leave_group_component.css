@@ -1,0 +1,20 @@
+.leaveGroup {
+    margin: 3em;
+    font-size: 250%;
+}
+
+.submit {
+
+}
+
+.submit:hover{
+    background-color: #00ff76;
+}
+
+.abort{
+    position:relative;
+    left: 12px;
+}
+.abort:hover{
+    background-color: #ff133b;
+}

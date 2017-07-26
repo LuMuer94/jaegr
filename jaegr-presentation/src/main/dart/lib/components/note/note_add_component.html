@@ -1,0 +1,16 @@
+<div *ngIf="group!=null && isAddingNote()!=null && isAddingNote()" >
+     <div class="NoteView">
+        <div class="titleText">
+            <span>Title:</span>
+        </div>
+        <div class="title">
+            <input [(ngModel)]="title" placeholder="Title:">
+         </div>
+        <div class="content">
+            <textarea [(ngModel)]="content" placeholder="Content">
+            </textarea>
+        </div>
+        <button class="submit" (click)="submit()">Submit</button>
+        <button class="abort" (click)="abort()">Abort</button>
+     </div>
+</div>

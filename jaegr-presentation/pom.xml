@@ -1,0 +1,114 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<project
+		xmlns="http://maven.apache.org/POM/4.0.0"
+		xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+		xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
+	<modelVersion>4.0.0</modelVersion>
+
+	<parent>
+		<groupId>com.jaegr</groupId>
+		<artifactId>jaegr-parent</artifactId>
+		<version>0.1-SNAPSHOT</version>
+		<relativePath>../pom.xml</relativePath>
+	</parent>
+
+	<artifactId>jaegr-presentation</artifactId>
+	<packaging>war</packaging>
+
+	<name>WT2 :: ${project.artifactId}</name>
+
+	<build>
+		<resources>
+			<resource>
+				<directory>src/main/dart</directory>
+				<targetPath>${project.build.directory}/${project.build.finalName}</targetPath>
+			</resource>
+		</resources>
+		<pluginManagement>
+			<plugins>
+				<plugin>
+					<groupId>org.wildfly.swarm</groupId>
+					<artifactId>wildfly-swarm-plugin</artifactId>
+					<version>${wildfly-swarm.version}</version>
+					<configuration>
+						<fractions>jpa,cdi,ejb,jaxrs</fractions>
+					</configuration>
+				</plugin>
+			</plugins>
+		</pluginManagement>
+		<plugins>
+			<plugin>
+				<groupId>org.wildfly.swarm</groupId>
+				<artifactId>wildfly-swarm-plugin</artifactId>
+				<version>${wildfly-swarm.version}</version>
+				<configuration>
+					<fractions>jpa,cdi,ejb,jaxrs</fractions>
+				</configuration>
+			</plugin>
+
+			<plugin>
+				<groupId>com.github.dzwicker.dart</groupId>
+				<artifactId>dart-maven-plugin</artifactId>
+				<version>3.0.9</version>
+				<configuration>
+					<checkedMode>true</checkedMode>
+					<testFailureIgnore>false</testFailureIgnore>
+					<sourceDirectory>src/main/dart</sourceDirectory>
+					<dartSdk>${env.DART_SDK}</dartSdk>
+				</configuration>
+				<executions>
+					<execution>
+						<id>pub-get</id>
+						<phase>compile</phase>
+						<goals>
+							<goal>pub</goal>
+						</goals>
+						<configuration>
+							<pubCommand>get</pubCommand>
+						</configuration>
+					</execution>
+					<execution>
+						<id>pub-build</id>
+						<phase>compile</phase>
+						<goals>
+							<goal>pub</goal>
+						</goals>
+						<configuration>
+							<pubCommand>build</pubCommand>
+							<pubOptions>
+								<pubOption>--output=${project.build.directory}/dart</pubOption>
+								<pubOption>--mode=debug</pubOption>
+							</pubOptions>
+						</configuration>
+					</execution>
+				</executions>
+			</plugin>
+
+			<plugin>
+				<groupId>org.apache.maven.plugins</groupId>
+				<artifactId>maven-war-plugin</artifactId>
+				<version>3.1.0</version>
+				<configuration>
+					<webResources>
+						<resource>
+							<directory>src/main/webapp</directory>
+							<filtering>true</filtering>
+						</resource>
+						<resource>
+							<directory>${project.build.directory}/dart</directory>
+						</resource>
+					</webResources>
+				</configuration>
+			</plugin>
+		</plugins>
+	</build>
+
+	<dependencies>
+		<dependency>
+			<groupId>com.jaegr</groupId>
+			<artifactId>jaegr-business</artifactId>
+			<version>${project.version}</version>
+		</dependency>
+	</dependencies>
+
+</project>
